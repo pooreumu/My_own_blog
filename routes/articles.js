@@ -18,14 +18,19 @@ router.get("/articles/:articlesId", async (req, res) => {
 })
 
 router.post("/articles", async (req, res) => {
-    const { Title, Writer, PW, date, Contents } = req.body
-    console.log({ Title, Writer, PW, date, Contents })
+    const Title = req.body.Title
+    const Writer = req.body.Writer
+    const PW = req.body.PW
+    const date = req.body.date
+    const Contents = req.body.Contents
+    console.log(Title)
+    console.log(Writer)
+    console.log(PW)
+    console.log(date)
+    console.log(Contents)
     const articlesId1 = await Articles.find()
-    console.log(articlesId1)
     const articlesId = articlesId1.length + 1
-    console.log(articlesId)
     const createdArticles = await Articles.create({ articlesId: articlesId, Title: Title, Writer: Writer, PW: PW, date: date, Contents: Contents })
-    console.log(createdArticles)
 
     res.send({ result: "작성 완료!" })
 

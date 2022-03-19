@@ -14,30 +14,19 @@
 
     <title>lending page</title>
 
-    
-
-</head>
-
-<body>
     <script>
         function save_order() {
             let title = $('#title').val()
-            console.log(title)
             let writer = $('#writer').val()
-            console.log(writer)
             let pw = $('#pw').val()
-            console.log(pw)
             let contents = $('#contents').val()
-            console.log(contents)
             let date1 = new Date()
             let date = date1.getTime()
-            console.log(date)
             
-    
             $.ajax({
                 type: 'post',
                 url: '/api/articles',
-                data: { Title : title, Writer :writer , PW : pw, Contents : contents, date : date},
+                data: {Title: title, Writer: writer, PW: Number(pw), Contents: contents, date: date},
                 success: function(response){
                     alert(response['result'])
                     window.location.href="/"
@@ -46,6 +35,10 @@
         }
     </script>
 
+</head>
+
+<body>
+    
     <section class="hero is-medium is-warning">
         <div class="hero-body">
             <p class="title">
