@@ -18,7 +18,7 @@ const articlesSchema = mongoose.Schema({
         type: Number,
         required: true,
     },
-    Date: {
+    date: {
         type: Number,
         required: true,
     },

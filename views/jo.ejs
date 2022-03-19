@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- ajax -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- bulma -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+
+    <title>lending page</title>
+
+    <script>
+        $(document).ready(function(){
+            show_post()
+        })
+
+        function show_post() {
+            $.ajax({
+                type: 'GET',
+                url: '/api/articles',
+                data: {},
+                success: function (response){
+                    let rows = response['articles']
+                    for (let i = 0; i < rows.length; i++) {
+                        let articlesId = rows[i]['articlesId']
+                        let Title = rows[i]['Title']
+                        let Writer = rows[i]['Writer']
+                        let date = rows[i]['date']
+
+                        let temp_html = `<div class="card-content" onclick="location.href='/api/articles/${articlesId}'">
+                                            <p class="title">
+                                                ${Title}
+                                            </p>
+                                            <p class="subtitle">
+                                                ${Writer}
+                                            </p>
+                                        </div>
+                                        <footer class="card-footer">
+                                            ${date}
+                                        </footer>`
+                        $('#card-box').append(temp_html)
+                    }
+                }
+            })
+        }
+    </script>
+
+</head>
+
+<body>
+    <section class="hero is-medium is-warning">
+        <div class="hero-body">
+            <p class="title">
+                푸름이의 블로그
+            </p>
+            <button class="button is-warning" onclick="location.replace('/write')">글쓰기</button>
+        </div>
+    </section>
+    <div class="card" id="card-box">
+        
+    </div>
+    
+</body>
+
+</html>
