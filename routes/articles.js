@@ -24,11 +24,18 @@ router.get("/articles/:articlesId", async (req, res) => {
 router.post("/articles", async (req, res) => {
     const { Title, Writer, PW, date, Contents, time } = req.body
     const articlesId1 = await Articles.find()
-    let articlesId2 = articlesId1.sort((a,b) => b.articlesId - a.articlesId)
-    const articlesId3 = articlesId2[0]['articlesId']
-    const articlesId = articlesId3 + 1
+    if (articlesId1.length) {
+        const articlesId2 = articlesId1.sort((a,b) => b.articlesId - a.articlesId)
+        const articlesId3 = articlesId2[0]['articlesId']
+        const articlesId = articlesId3 + 1
+        const createdArticles = await Articles.create({ articlesId, Title, Writer, PW, date, Contents, time })
+    }else {
+        const articlesId = 1
+        const createdArticles = await Articles.create({ articlesId, Title, Writer, PW, date, Contents, time })
+    }
+    
 
-    const createdArticles = await Articles.create({ articlesId, Title, Writer, PW, date, Contents, time })
+    
 
     res.json({ result: "작성 완료!" })
 
