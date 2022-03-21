@@ -19,11 +19,15 @@ const articlesSchema = mongoose.Schema({
         required: true,
     },
     date: {
-        type: Number,
+        type: String,
         required: true,
     },
     Contents: {
         type: String,
+        required: true,
+    },
+    time: {
+        type: Number,
         required: true,
     },
 });
