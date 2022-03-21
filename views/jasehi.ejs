@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- ajax -->
+    <!-- jquery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <!-- bulma -->
@@ -38,42 +38,70 @@
     </style>
 
     <script>
+        const pathName = window.location.pathname;
+        console.log(pathName)
+        const articlesId = pathName.slice(-1)
+        console.log(articlesId)
+        $(document).ready(function(){
+            show_post()
+        })
 
+        function show_post() {
+            $.ajax({
+                type: 'get',
+                url: `/api/articles/${articlesId}`,
+                data: {},
+                success: function (response){
+                    console.log(response)
+                    let rows = response['articles']
+                    console.log(rows)
+                    
+                    let Title = rows['Title']
+                    let Writer = rows['Writer']
+                    let Contents = rows['Contents']
+                    let date = rows['date']
+
+                    let temp_html = `<div class="card">
+                                        <div class="card-content">
+                                            <p class="title">
+                                                제목: ${Title}
+                                            </p>
+                                            <p class="subtitle">
+                                                ${Contents}
+                                            </p>
+                                            <div>
+                                                <p>
+                                                    작성자: ${Writer}
+                                                </p>
+                                                <p>
+                                                    날짜: ${date}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <footer class="card-footer">
+                                            <p class="card-footer-item">
+                                                <button class="button is-warning" onclick="location.replace('/revise/${articlesId}')">수정하기</button>
+                                            </p>
+                                        </footer>
+                                    </div>`
+                    $('.cards').append(temp_html)
+                    
+                }
+            })
+        }
     </script>
 </head>
 
 <body>
     <section class="hero is-medium is-warning">
         <div class="hero-body">
-            <p class="title">
+            <p class="title" onclick="location.replace('/')">
                 푸름이의 블로그
             </p>
         </div>
     </section>
     <div class="cards">
-        <div class="card">
-            <div class="card-content">
-                <p class="title">
-                    <%= articles.Title %>
-                </p>
-                <p class="subtitle">
-                    <%= articles.Contents %>
-                </p>
-                <div>
-                    <p>
-                        <%= articles.Writer %>
-                    </p>
-                    <p>
-                        <%= articles.date %>
-                    </p>
-                </div>
-            </div>
-            <footer class="card-footer">
-                <p class="card-footer-item">
-                    <button class="button is-warning" onclick="openmodal()">수정하기</button>
-                </p>
-            </footer>
-        </div>
+
     </div>
 
 </body>

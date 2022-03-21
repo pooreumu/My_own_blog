@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- ajax -->
+    <!-- jquery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <!-- bulma -->
@@ -14,34 +14,15 @@
 
     <title>lending page</title>
 
-    <script>
-        function save_order() {
-            let title = $('#title').val()
-            let writer = $('#writer').val()
-            let pw = $('#pw').val()
-            let contents = $('#contents').val()
-            let date1 = new Date()
-            let date = date1.getTime()
-            
-            $.ajax({
-                type: 'post',
-                url: '/api/articles',
-                data: {Title: title, Writer: writer, PW: Number(pw), Contents: contents, date: date},
-                success: function(response){
-                    alert(response['result'])
-                    window.location.href="/"
-                }
-            })
-        }
-    </script>
+
 
 </head>
 
 <body>
-    
+
     <section class="hero is-medium is-warning">
         <div class="hero-body">
-            <p class="title">
+            <p class="title" onclick="location.replace('/')">
                 푸름이의 블로그
             </p>
         </div>
@@ -54,7 +35,32 @@
         <button class="button is-warning" onclick="save_order()">글쓰기</button>
         <button class="button is-warning" onclick="location.replace('/')">닫기</button>
     </div>
-    
+    <script>
+        function save_order() {
+            let Title = $('#title').val()
+            let Writer = $('#writer').val()
+            let pw = $('#pw').val()
+            let PW = Number(pw)
+            let Contents = $('#contents').val()
+            let date1 = new Date()
+            let date = date1.toDateString()
+            let time = date1.getTime()
+
+
+            let data = { Title, Writer, PW, Contents, date, time }
+
+            $.ajax({
+                type: 'post',
+                url: '/api/articles',
+                data: data,
+                dataType: 'json',
+                success: function (response) {
+                    alert(response['result'])
+                    window.location.href = "/"
+                }
+            })
+        }
+    </script>
 </body>
 
 </html>

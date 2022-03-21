@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- ajax -->
+    <!-- jquery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <!-- bulma -->
@@ -21,18 +21,19 @@
 
         function show_post() {
             $.ajax({
-                type: 'GET',
+                type: 'get',
                 url: '/api/articles',
                 data: {},
                 success: function (response){
                     let rows = response['articles']
                     for (let i = 0; i < rows.length; i++) {
-                        let articlesId = rows[i]['articlesId']
+                        let articlesId1 = rows[i]['articlesId']
+                        let articlesId = Number(articlesId1)
                         let Title = rows[i]['Title']
                         let Writer = rows[i]['Writer']
                         let date = rows[i]['date']
 
-                        let temp_html = `<div class="card-content" onclick="location.href='/api/articles/${articlesId}'">
+                        let temp_html = `<div class="card-content" onclick="location.href='/detail/${articlesId}'">
                                             <p class="title">
                                                 ${Title}
                                             </p>
@@ -55,7 +56,7 @@
 <body>
     <section class="hero is-medium is-warning">
         <div class="hero-body">
-            <p class="title">
+            <p class="title" onclick="location.replace('/')">
                 푸름이의 블로그
             </p>
             <button class="button is-warning" onclick="location.replace('/write')">글쓰기</button>
