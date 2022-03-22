@@ -22,7 +22,10 @@ router.get("/articles/:articlesId", async (req, res) => {
 })
 
 router.post("/articles", async (req, res) => {
-    const { Title, Writer, PW, date, Contents, time } = req.body
+    const Title = req.body.Title.replace(/\</,"&#60;").replace(/\>/,"&gt;").replace(/\$/,"&#36;").replace(/\//,"&#47;").replace(/\'/,"&#39;").replace(/\(/,"&#40;").replace(/\)/,"&#41;")
+    const Writer = req.body.Writer.replace(/\</,"&#60;").replace(/\>/,"&gt;").replace(/\$/,"&#36;").replace(/\//,"&#47;").replace(/\'/,"&#39;").replace(/\(/,"&#40;").replace(/\)/,"&#41;")
+    const Contents = req.body.Contents.replace(/\</,"&#60;").replace(/\>/,"&gt;").replace(/\$/,"&#36;").replace(/\//,"&#47;").replace(/\'/,"&#39;").replace(/\(/,"&#40;").replace(/\)/,"&#41;")
+    const { PW, date, time } = req.body
     const articlesId1 = await Articles.find()
     if (articlesId1.length) {
         const articlesId2 = articlesId1.sort((a,b) => b.articlesId - a.articlesId)
@@ -56,7 +59,10 @@ router.delete("/articles/:articlesId", async (req, res) => {
 
 router.put("/articles/:articlesId", async (req, res) => {
     const { articlesId } = req.params
-    const { Title, Writer, PW, date, Contents, time } = req.body
+    const Title = req.body.Title.replace(/\</,"&#60;").replace(/\>/,"&gt;").replace(/\$/,"&#36;").replace(/\//,"&#47;").replace(/\'/,"&#39;").replace(/\(/,"&#40;").replace(/\)/,"&#41;")
+    const Writer = req.body.Writer.replace(/\</,"&#60;").replace(/\>/,"&gt;").replace(/\$/,"&#36;").replace(/\//,"&#47;").replace(/\'/,"&#39;").replace(/\(/,"&#40;").replace(/\)/,"&#41;")
+    const Contents = req.body.Contents.replace(/\</,"&#60;").replace(/\>/,"&gt;").replace(/\$/,"&#36;").replace(/\//,"&#47;").replace(/\'/,"&#39;").replace(/\(/,"&#40;").replace(/\)/,"&#41;")
+    const { PW, date, time } = req.body
     const pwCheck = await Articles.find({ articlesId: Number(articlesId) })
     if(pwCheck[0]["PW"] === Number(PW)) {
         await Articles.updateOne({ articlesId: Number(articlesId) }, { $set: { Title, Writer, date, Contents, time }})
