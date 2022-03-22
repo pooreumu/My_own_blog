@@ -2,6 +2,7 @@ const express = require("express");
 const ejs = require("ejs");
 const Articles = require("./schemas/article");
 const connect = require("./schemas");
+require("dotenv").config();
 
 connect();
 
@@ -27,9 +28,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/detail/:articlesId", async (req, res) => {
-    const { articlesId } = req.params
-    const articles = await Articles.findOne({ articlesId })
-    res.render("jasehi.ejs", { articles: articles })
+    res.render("jasehi.ejs")
 });
 
 app.get("/write", (req, res) => {
@@ -39,12 +38,6 @@ app.get("/write", (req, res) => {
 app.get("/revise/:articlesId", async (req, res) => {
     res.render("revise.ejs")
 });
-
-// app.get("/revise/:articlesId", async (req, res) => {
-//     const { articlesId } = req.params
-//     const articles = await Articles.findOne({ articlesId })
-//     res.render("revise.ejs", { articles: articles })
-// });
 
 app.listen(port, () => {
     console.log(port, "포트로 서버가 켜졌어요!")

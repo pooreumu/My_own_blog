@@ -12,14 +12,32 @@
     <!-- bulma -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
 
-    <title>lending page</title>
+    <title>푸름이의 블로그</title>
 
+    <style>
+        .revise-box1 {
+            margin: 20px auto 0px auto;
+            
+            width: 95%;
+            max-width: 500px;
+        }
+        .PWPW11{
+            margin: 20px auto 0px auto;
+            
+            width: 95%;
+            max-width: 500px;
+        }
+        .btnss {
+            margin: 20px auto 0px auto;
+            
+            width: 95%;
+            max-width: 500px;
+        }
+    </style>
     <script>
         const pathName = window.location.pathname;
-        console.log(pathName)
-        const articlesId1 = pathName.slice(-1)
-        console.log(articlesId1)
-        const articlesId = Number(articlesId1)
+        const articlesId1 = pathName.split("/")
+        const articlesId = articlesId1[2]
         $(document).ready(function(){
             revise()
         })
@@ -111,13 +129,17 @@
             </p>
         </div>
     </section>
-    <div id="revise-box">
+    <div class="revise-box1">
+        <div id="revise-box" class="revise-box">
+        </div>
     </div>
-    <div>
+    <div class="PWPW11">
         <input id="pw" class="input is-warning" type="password" placeholder="비밀번호">
+    </div>
+    <div class="btnss">
         <button class="button is-warning" onclick="revise_order()">수정하기</button>
         <button class="button is-warning" onclick="delete_order()">삭제하기</button>
-        <button class="button is-warning" onclick="location.href=`/detail/${articlesId}`">닫기</button>       
+        <button class="button is-warning" onclick="location.href=`/detail/${articlesId}`">닫기</button>
     </div>
 
 </body>

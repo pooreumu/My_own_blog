@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
 
 
-    <title>lending page</title>
+    <title>푸름이의 블로그</title>
     
 
     <style>
@@ -27,21 +27,28 @@
 
             width: 95%;
             max-width: 500px;
-            height: 200px;
         }
 
         .card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            margin: 20px auto 0px auto;
+
             width: 95%;
             max-width: 500px;
-            height: 200px;
+        }
+        .title {
+            width: fit-content;
         }
     </style>
 
     <script>
         const pathName = window.location.pathname;
-        console.log(pathName)
-        const articlesId = pathName.slice(-1)
-        console.log(articlesId)
+        const articlesId1 = pathName.split("/")
+        const articlesId = articlesId1[2]
         $(document).ready(function(){
             show_post()
         })
@@ -80,7 +87,7 @@
                                         </div>
                                         <footer class="card-footer">
                                             <p class="card-footer-item">
-                                                <button class="button is-warning" onclick="location.replace('/revise/${articlesId}')">수정하기</button>
+                                                <button class="button is-warning" style="cursor:pointer" onclick="location.replace('/revise/${articlesId}')">수정하기</button>
                                             </p>
                                         </footer>
                                     </div>`
@@ -95,7 +102,7 @@
 <body>
     <section class="hero is-medium is-warning">
         <div class="hero-body">
-            <p class="title" onclick="location.replace('/')">
+            <p class="title" style="cursor:pointer" onclick="location.replace('/')">
                 푸름이의 블로그
             </p>
         </div>

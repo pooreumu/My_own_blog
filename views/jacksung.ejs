@@ -12,8 +12,26 @@
     <!-- bulma -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
 
-    <title>lending page</title>
+    <title>푸름이의 블로그</title>
 
+    <style>
+        .title {
+            width: fit-content;
+        }
+
+        .contentss {
+            margin: 20px auto 0px auto;
+
+            width: 95%;
+            max-width: 500px;
+        }
+        .btnss {
+            margin: 20px auto 0px auto;
+            
+            width: 95%;
+            max-width: 500px;
+        }
+    </style>
 
 
 </head>
@@ -22,18 +40,20 @@
 
     <section class="hero is-medium is-warning">
         <div class="hero-body">
-            <p class="title" onclick="location.replace('/')">
+            <p class="title" style="cursor:pointer" onclick="location.replace('/')">
                 푸름이의 블로그
             </p>
         </div>
     </section>
-    <div>
+    <div class="contentss">
         <input id="title" class="input is-warning" type="text" placeholder="제목">
         <input id="writer" class="input is-warning" type="text" placeholder="글쓴이">
         <input id="pw" class="input is-warning" type="password" placeholder="비밀번호">
         <textarea id="contents" class="textarea is-warning" placeholder="내용"></textarea>
-        <button class="button is-warning" onclick="save_order()">글쓰기</button>
-        <button class="button is-warning" onclick="location.replace('/')">닫기</button>
+    </div>
+    <div class="btnss">
+        <button class="button is-warning" style="cursor:pointer" onclick="save_order()">글쓰기</button>
+        <button class="button is-warning" style="cursor:pointer" onclick="location.replace('/')">닫기</button>
     </div>
     <script>
         function save_order() {

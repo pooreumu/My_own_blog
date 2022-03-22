@@ -12,8 +12,32 @@
     <!-- bulma -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
 
-    <title>lending page</title>
+    <title>푸름이의 블로그</title>
 
+    <style>
+        .cards {
+            margin: 20px auto 0px auto;
+
+            width: 95%;
+            max-width: 500px;
+        }
+        .card-box {
+            border: solid;
+            border-color: rgb(255, 216, 135);
+
+            margin: 20px auto 0px auto;
+
+            width: 95%;
+            max-width: 500px;
+
+            border-radius: 10px;
+
+            padding-left: 20px;
+        }
+        .title {
+            width: fit-content;
+        }
+    </style>
     <script>
         $(document).ready(function(){
             show_post()
@@ -33,18 +57,22 @@
                         let Writer = rows[i]['Writer']
                         let date = rows[i]['date']
 
-                        let temp_html = `<div class="card-content" onclick="location.href='/detail/${articlesId}'">
-                                            <p class="title">
-                                                ${Title}
-                                            </p>
-                                            <p class="subtitle">
-                                                ${Writer}
-                                            </p>
-                                        </div>
-                                        <footer class="card-footer">
-                                            ${date}
-                                        </footer>`
-                        $('#card-box').append(temp_html)
+                        let temp_html = `<div class="card-box" id="card-box" style="cursor:pointer" onclick="location.href='/detail/${articlesId}'">
+                                            <div class="card-content">
+                                                <p class="title">
+                                                    제목: ${Title}
+                                                </p>
+                                                <p class="subtitle">
+                                                    작성자: ${Writer}
+                                                </p>
+                                            </div>
+                                            <footer class="card-footer">
+                                                <div>
+                                                    ${date}
+                                                </div>
+                                            </footer>
+                                        </div>`
+                        $('#cards').append(temp_html)
                     }
                 }
             })
@@ -56,15 +84,16 @@
 <body>
     <section class="hero is-medium is-warning">
         <div class="hero-body">
-            <p class="title" onclick="location.replace('/')">
+            <p class="title" style="cursor:pointer" onclick="location.replace('/')">
                 푸름이의 블로그
             </p>
-            <button class="button is-warning" onclick="location.replace('/write')">글쓰기</button>
+            <button class="button is-warning" style="cursor:pointer" onclick="location.replace('/write')">글쓰기</button>
         </div>
     </section>
-    <div class="card" id="card-box">
-        
+    <div class="cards" id="cards">
+ 
     </div>
+    
     
 </body>
 
