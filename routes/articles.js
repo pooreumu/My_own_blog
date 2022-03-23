@@ -22,9 +22,9 @@ router.get("/articles/:articlesId", async (req, res) => {
 })
 
 router.post("/articles", async (req, res) => {
-    const Title = req.body.Title.replace(/\</,"&#60;").replace(/\>/,"&gt;").replace(/\$/,"&#36;").replace(/\//,"&#47;").replace(/\'/,"&#39;").replace(/\(/,"&#40;").replace(/\)/,"&#41;")
-    const Writer = req.body.Writer.replace(/\</,"&#60;").replace(/\>/,"&gt;").replace(/\$/,"&#36;").replace(/\//,"&#47;").replace(/\'/,"&#39;").replace(/\(/,"&#40;").replace(/\)/,"&#41;")
-    const Contents = req.body.Contents.replace(/\</,"&#60;").replace(/\>/,"&gt;").replace(/\$/,"&#36;").replace(/\//,"&#47;").replace(/\'/,"&#39;").replace(/\(/,"&#40;").replace(/\)/,"&#41;")
+    const Title = req.body.Title.replace(/\&/g,"&#38;").replace(/\</g,"&#60;").replace(/\>/g,"&gt;").replace(/\$/g,"&#36;").replace(/\//g,"&#47;").replace(/\'/g,"&#39;").replace(/\(/g,"&#40;").replace(/\)/g,"&#41;")
+    const Writer = req.body.Writer.replace(/\&/g,"&#38;").replace(/\</g,"&#60;").replace(/\>/g,"&gt;").replace(/\$/g,"&#36;").replace(/\//g,"&#47;").replace(/\'/g,"&#39;").replace(/\(/g,"&#40;").replace(/\)/g,"&#41;")
+    const Contents = req.body.Contents.replace(/\&/g,"&#38;").replace(/\</g,"&#60;").replace(/\>/g,"&gt;").replace(/\$/g,"&#36;").replace(/\//g,"&#47;").replace(/\'/g,"&#39;").replace(/\(/g,"&#40;").replace(/\)/g,"&#41;")
     const { PW, date, time } = req.body
     const articlesId1 = await Articles.find()
     if (articlesId1.length) {
@@ -59,9 +59,9 @@ router.delete("/articles/:articlesId", async (req, res) => {
 
 router.put("/articles/:articlesId", async (req, res) => {
     const { articlesId } = req.params
-    const Title = req.body.Title.replace(/\</,"&#60;").replace(/\>/,"&gt;").replace(/\$/,"&#36;").replace(/\//,"&#47;").replace(/\'/,"&#39;").replace(/\(/,"&#40;").replace(/\)/,"&#41;")
-    const Writer = req.body.Writer.replace(/\</,"&#60;").replace(/\>/,"&gt;").replace(/\$/,"&#36;").replace(/\//,"&#47;").replace(/\'/,"&#39;").replace(/\(/,"&#40;").replace(/\)/,"&#41;")
-    const Contents = req.body.Contents.replace(/\</,"&#60;").replace(/\>/,"&gt;").replace(/\$/,"&#36;").replace(/\//,"&#47;").replace(/\'/,"&#39;").replace(/\(/,"&#40;").replace(/\)/,"&#41;")
+    const Title = req.body.Title.replace(/\&/g,"&#38;").replace(/\</g,"&#60;").replace(/\>/g,"&gt;").replace(/\$/g,"&#36;").replace(/\//g,"&#47;").replace(/\'/g,"&#39;").replace(/\(/g,"&#40;").replace(/\)/g,"&#41;")
+    const Writer = req.body.Writer.replace(/\&/g,"&#38;").replace(/\</g,"&#60;").replace(/\>/g,"&gt;").replace(/\$/g,"&#36;").replace(/\//g,"&#47;").replace(/\'/g,"&#39;").replace(/\(/g,"&#40;").replace(/\)/g,"&#41;")
+    const Contents = req.body.Contents.replace(/\&/g,"&#38;").replace(/\</g,"&#60;").replace(/\>/g,"&gt;").replace(/\$/g,"&#36;").replace(/\//g,"&#47;").replace(/\'/g,"&#39;").replace(/\(/g,"&#40;").replace(/\)/g,"&#41;")
     const { PW, date, time } = req.body
     const pwCheck = await Articles.find({ articlesId: Number(articlesId) })
     if(pwCheck[0]["PW"] === Number(PW)) {
