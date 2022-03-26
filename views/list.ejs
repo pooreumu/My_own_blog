@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- bulma -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css" />
+
+    <title>푸름이의 블로그</title>
+
+    <style>
+      .cards {
+        margin: 20px auto 0px auto;
+
+        width: 95%;
+        max-width: 500px;
+      }
+      .card-box {
+        border: solid;
+        border-color: rgb(255, 216, 135);
+
+        margin: 20px auto 0px auto;
+
+        width: 95%;
+        max-width: 500px;
+
+        border-radius: 10px;
+
+        padding-left: 20px;
+      }
+      .title {
+        width: fit-content;
+      }
+    </style>
+  </head>
+
+  <body>
+    <script>
+      $(document).ready(function () {
+        if (localStorage.getItem("token")) {
+          $("#btn_login").hide();
+          $("#btn_signup").hide();
+          $("#btn_logout").show();
+        } else {
+          $("#btn_write").hide();
+        }
+        show_list();
+      });
+
+      function show_list() {
+        $.ajax({
+          type: "get",
+          url: "/api/articles",
+          data: {},
+          success: function (response) {
+            let rows = response["articles"];
+            for (let i = 0; i < rows.length; i++) {
+              let articlesId1 = rows[i]["articlesId"];
+              let articlesId = Number(articlesId1);
+              let Title = rows[i]["Title"];
+              let Writer = rows[i]["Writer"];
+              let date = rows[i]["date"];
+
+              let temp_html = `<div class="card-box" id="card-box" style="cursor:pointer" onclick="location.href='/detail/${articlesId}'">
+                                            <div class="card-content">
+                                                <p class="title">
+                                                    제목: ${Title}
+                                                </p>
+                                                <p class="subtitle">
+                                                    작성자: ${Writer}
+                                                </p>
+                                            </div>
+                                            <footer class="card-footer">
+                                                <div>
+                                                    ${date}
+                                                </div>
+                                            </footer>
+                                        </div>`;
+              $("#cards").append(temp_html);
+            }
+          },
+        });
+      }
+      function sign_out() {
+        localStorage.clear();
+        window.location.href = "/";
+      }
+      function show_post() {}
+    </script>
+    <section class="hero is-medium is-warning">
+      <div class="hero-body">
+        <p class="title" style="cursor: pointer" onclick="location.replace('/')">푸름이의 블로그</p>
+        <button id="btn_write" class="button is-warning" style="cursor: pointer" onclick="location.replace('/write')">글쓰기</button>
+        <button id="btn_signup" class="button is-warning" style="cursor: pointer" onclick="location.replace('/signup')">회원가입</button>
+        <button id="btn_login" class="button is-warning" style="cursor: pointer" onclick="location.replace('/signin')">로그인</button>
+        <button id="btn_logout" class="button is-warning" style="display: none" style="cursor: pointer" onclick="sign_out()">로그아웃</button>
+      </div>
+    </section>
+    <div class="cards" id="cards"></div>
+  </body>
+</html>

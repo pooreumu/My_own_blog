@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- bulma -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css" />
+
+    <title>푸름이의 블로그</title>
+
+    <style>
+      .title {
+        width: fit-content;
+      }
+
+      .inputss {
+        margin: 20px auto 0px auto;
+
+        width: 95%;
+        max-width: 500px;
+      }
+
+      .btnss {
+        margin: 20px auto 0px auto;
+
+        width: 95%;
+        max-width: 500px;
+      }
+    </style>
+
+    <script>
+      $(document).ready(function () {
+        $.ajax({
+          type: "get",
+          url: "/api/users/me",
+          headers: {
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          success: function (response) {
+            alert("이미 로그인이 되어있습니다.");
+            window.location.href = "/";
+          },
+        });
+      });
+      function sign_up() {
+        let nickname = $("#nickname").val();
+        let password = $("#password").val();
+        let confirmPassword = $("#confirmPassword").val();
+        let data = { nickname, password, confirmPassword };
+        $.ajax({
+          type: "post",
+          url: "/api/signup",
+          data: data,
+          dataType: "json",
+          success: function (response) {
+            alert("회원가입 완료!");
+            window.location.href = "/signin";
+          },
+          error: function (error) {
+            alert(error.responseJSON.errorMessage);
+          },
+        });
+      }
+    </script>
+  </head>
+  <body>
+    <section class="hero is-medium is-warning">
+      <div class="hero-body">
+        <p class="title" style="cursor: pointer" onclick="location.replace('/')">푸름이의 블로그</p>
+      </div>
+    </section>
+    <div class="inputss">
+      <input id="nickname" class="input is-warning" type="text" placeholder="닉네임" />
+      <input id="password" class="input is-warning" type="password" placeholder="비밀번호" />
+      <input id="confirmPassword" class="input is-warning" type="password" placeholder="비밀번호 확인" />
+    </div>
+    <div class="btnss">
+      <button class="button is-warning" style="cursor: pointer" onclick="sign_up()">가입하기</button>
+      <button class="button is-warning" style="cursor: pointer" onclick="location.replace('/')">닫기</button>
+    </div>
+  </body>
+</html>
