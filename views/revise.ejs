@@ -1,148 +1,160 @@
 <!DOCTYPE html>
 
 <html>
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <!-- jquery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    
+
     <!-- bulma -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css" />
 
     <title>푸름이의 블로그</title>
 
     <style>
-        .revise-box1 {
-            margin: 20px auto 0px auto;
-            
-            width: 95%;
-            max-width: 500px;
-        }
-        .PWPW11{
-            margin: 20px auto 0px auto;
-            
-            width: 95%;
-            max-width: 500px;
-        }
-        .btnss {
-            margin: 20px auto 0px auto;
-            
-            width: 95%;
-            max-width: 500px;
-        }
+      .revise-box1 {
+        margin: 20px auto 0px auto;
+
+        width: 95%;
+        max-width: 500px;
+      }
+      .PWPW11 {
+        margin: 20px auto 0px auto;
+
+        width: 95%;
+        max-width: 500px;
+      }
+      .btnss {
+        margin: 20px auto 0px auto;
+
+        width: 95%;
+        max-width: 500px;
+      }
     </style>
-    
+  </head>
 
-
-
-</head>
-
-<body>
+  <body>
     <script>
-        const pathName = window.location.pathname;
-        const articlesId1 = pathName.split("/")
-        const articlesId = articlesId1[2]
-        $(document).ready(function(){
-            revise()
-        })
-        
-        function revise() {
-            $.ajax({
-                type: 'get',
-                url: `/api/articles/${articlesId}`,
-                data: {},
-                success: function (response){
-                    console.log(response)
-                    let rows = response['articles']
-                    console.log(rows)
-                    let Title = rows['Title']
-                    let Writer = rows['Writer']
-                    let date = rows['date']
-                    let contents = rows['Contents']
+      const pathName = window.location.pathname;
+      const articlesId1 = pathName.split("/");
+      const articlesId = articlesId1[2];
+      $(document).ready(function () {
+        $.ajax({
+          type: "get",
+          url: "/api/users/me",
+          headers: {
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          success: function (response) {
+            revise();
+          },
+          error: function (error) {
+            alert(error.responseJSON.errorMessage);
+            window.location.href = "/signin";
+          },
+        });
+      });
 
-                    let temp_html = `<textarea id="title" class="textarea is-warning" placeholder="제목">${Title}</textarea>
+      function revise() {
+        $.ajax({
+          type: "get",
+          url: `/api/articles/${articlesId}`,
+          data: {},
+          headers: {
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          success: function (response) {
+            let rows = response["articles"];
+            let Title = rows["Title"];
+            let Writer = rows["Writer"];
+            let date = rows["date"];
+            let contents = rows["Contents"];
+
+            let temp_html = `<textarea id="title" class="textarea is-warning" placeholder="제목">${Title}</textarea>
                                     <textarea id="writer" class="textarea is-warning" placeholder="글쓴이">${Writer}</textarea>
                                     <textarea id="contents" class="textarea is-warning" placeholder="내용">${contents}</textarea>
-                                    `
-                    $('#revise-box').append(temp_html)
-                    
-                }
-            })
-        }
+                                    `;
+            $("#revise-box").append(temp_html);
+          },
+        });
+      }
 
-        function revise_order() {
-            let Title = $('#title').val()
-            let Writer = $('#writer').val()
-            let pw = $('#pw').val()
-            console.log(pw)
-            let PW = Number(pw)
-            let Contents = $('#contents').val()
-            let date1 = new Date()
-            let date = date1.toDateString()
-            let time = date1.getTime()
+      function revise_order() {
+        let Title = $("#title").val();
+        let Writer = $("#writer").val();
+        let pw = $("#pw").val();
+        let PW = Number(pw);
+        let Contents = $("#contents").val();
+        let date1 = new Date();
+        let date = date1.toDateString();
+        let time = date1.getTime();
 
-            let data = { Title, Writer, Contents, date, PW, time }
+        let data = { Title, Writer, Contents, date, PW, time };
 
-            $.ajax({
-                type: 'put',
-                url: `/api/articles/${articlesId}`,
-                data: data,
-                dataType: 'json',
-                success: function (response) {
-                    if (response["result"] === 'success'){
-                        alert("수정 완료!")
-                        window.location.href = "/"
-                    }else {
-                        alert('비밀번호가 다릅니다')
-                    }
-                    
-                    
-                }
-            })
-        }
-        
-        function delete_order(){
-            let PW = $('#pw').val()
+        $.ajax({
+          type: "put",
+          url: `/api/articles/${articlesId}`,
+          data: data,
+          dataType: "json",
+          headers: {
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          success: function (response) {
+            if (response["result"] === "success") {
+              alert("수정 완료!");
+              window.location.href = "/";
+            } else {
+              alert("비밀번호가 다릅니다");
+            }
+          },
+        });
+      }
 
-            $.ajax({
-                type: 'delete',
-                url:`/api/articles/${articlesId}`,
-                data: { PW },
-                success: function (response) {
-                    if (response["result"] === 'success'){
-                        alert("삭제 완료!")
-                        window.location.href = "/"
-                    }else {
-                        alert('비밀번호가 다릅니다')
-                    }
-                }
-            })
-        }
+      function delete_order() {
+        let PW = $("#pw").val();
+
+        $.ajax({
+          type: "delete",
+          url: `/api/articles/${articlesId}`,
+          data: { PW },
+          headers: {
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          success: function (response) {
+            if (response["result"] === "success") {
+              alert("삭제 완료!");
+              window.location.href = "/";
+            } else {
+              alert("비밀번호가 다릅니다");
+            }
+          },
+        });
+      }
+      function sign_out() {
+        localStorage.clear();
+        window.location.href = "/";
+      }
     </script>
 
     <section class="hero is-medium is-warning">
-        <div class="hero-body">
-            <p class="title" onclick="location.replace('/')">
-                푸름이의 블로그
-            </p>
-        </div>
+      <div class="hero-body">
+        <p class="title" onclick="location.replace('/')">푸름이의 블로그</p>
+        <button id="btn_write" class="button is-warning" style="cursor: pointer" onclick="location.replace('/write')">글쓰기</button>
+        <button id="btn_logout" class="button is-warning" style="cursor: pointer" onclick="sign_out()">로그아웃</button>
+      </div>
     </section>
     <div class="revise-box1">
-        <div id="revise-box" class="revise-box">
-        </div>
+      <div id="revise-box" class="revise-box"></div>
     </div>
     <div class="PWPW11">
-        <input id="pw" class="input is-warning" type="password" placeholder="비밀번호">
+      <input id="pw" class="input is-warning" type="password" placeholder="비밀번호" />
     </div>
     <div class="btnss">
-        <button class="button is-warning" onclick="revise_order()">수정하기</button>
-        <button class="button is-warning" onclick="delete_order()">삭제하기</button>
-        <button class="button is-warning" onclick="location.href=`/detail/${articlesId}`">닫기</button>
+      <button class="button is-warning" onclick="revise_order()">수정하기</button>
+      <button class="button is-warning" onclick="delete_order()">삭제하기</button>
+      <button class="button is-warning" onclick="location.href=`/detail/${articlesId}`">닫기</button>
     </div>
-
-</body>
-
+  </body>
 </html>

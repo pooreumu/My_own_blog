@@ -1,24 +1,15 @@
 const mongoose = require("mongoose");
 
-const articlesSchema = mongoose.Schema({
+const postsSchema = mongoose.Schema({
   articlesId: {
     type: Number,
     required: true,
-    unique: true,
   },
-  Title: {
-    type: String,
-    required: true,
+  postsId: {
+    type: Number,
+    require: true,
   },
   Writer: {
-    type: String,
-    required: true,
-  },
-  PW: {
-    type: Number,
-    required: true,
-  },
-  date: {
     type: String,
     required: true,
   },
@@ -32,4 +23,4 @@ const articlesSchema = mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("Articles", articlesSchema);
+module.exports = mongoose.model("Posts", postsSchema);

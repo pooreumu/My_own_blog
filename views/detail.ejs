@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- bulma -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css" />
+
+    <title>푸름이의 블로그</title>
+
+    <style>
+      .cards {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        margin: 20px auto 0px auto;
+
+        width: 95%;
+        max-width: 500px;
+      }
+
+      .card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        margin: 20px auto 0px auto;
+
+        width: 95%;
+        max-width: 500px;
+      }
+      .title {
+        width: fit-content;
+      }
+    </style>
+  </head>
+
+  <body>
+    <script>
+      const pathName = window.location.pathname;
+      const articlesId1 = pathName.split("/");
+      const articlesId = articlesId1[2];
+      $(document).ready(function () {
+        show_post();
+      });
+
+      function show_post() {
+        $.ajax({
+          type: "get",
+          url: `/api/articles/${articlesId}`,
+          data: {},
+          success: function (response) {
+            let rows = response["articles"];
+            let Title = rows["Title"];
+            let Writer = rows["Writer"];
+            let Contents = rows["Contents"];
+            let date = rows["date"];
+
+            let temp_html = `<div class="card">
+                                        <div class="card-content">
+                                            <p class="title">
+                                                제목: ${Title}
+                                            </p>
+                                            <p class="subtitle">
+                                                ${Contents}
+                                            </p>
+                                            <div>
+                                                <p>
+                                                    작성자: ${Writer}
+                                                </p>
+                                                <p>
+                                                    날짜: ${date}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <footer class="card-footer">
+                                            <p class="card-footer-item">
+                                                <button class="button is-warning" style="cursor:pointer" onclick="location.replace('/revise/${articlesId}')">수정하기</button>
+                                            </p>
+                                        </footer>
+                                    </div>`;
+            $(".cards").append(temp_html);
+          },
+        });
+      }
+      function sign_out() {
+        localStorage.clear();
+        window.location.href = "/";
+      }
+    </script>
+    <section class="hero is-medium is-warning">
+      <div class="hero-body">
+        <p class="title" style="cursor: pointer" onclick="location.replace('/')">푸름이의 블로그</p>
+        <button id="btn_write" class="button is-warning" style="cursor: pointer" onclick="location.replace('/write')">글쓰기</button>
+        <button id="btn_logout" class="button is-warning" style="cursor: pointer" onclick="sign_out()">로그아웃</button>
+      </div>
+    </section>
+    <div class="cards"></div>
+  </body>
+</html>
