@@ -73,9 +73,25 @@
       $(document).ready(function () {
         if (localStorage.getItem("token")) {
           $("#btn_write").show();
+          $("#btn_logout").show();
+          $("#btn_login").hide();
+          $("#btn_signup").hide();
         }
         show_article();
-        show_post();
+        $.ajax({
+          type: "get",
+          url: "/api/users/me",
+          headers: {
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          success: function (response) {
+            const nickname = response["user"]["nickname"];
+            show_post_login(nickname);
+          },
+          error: function () {
+            show_post();
+          },
+        });
       });
 
       function show_article() {
@@ -119,7 +135,7 @@
       }
       function sign_out() {
         localStorage.clear();
-        window.location.href = "/";
+        window.location.reload();
       }
 
       function show_post() {
@@ -132,16 +148,64 @@
             for (let i = 0; i < rows.length; i++) {
               let Writer = rows[i]["Writer"];
               let Contents = rows[i]["Contents"];
+              let postsId = rows[i]["postsId"];
 
               let temp_html = `<tr>
                                 <td>${Writer}</td>
-                                <td>${Contents}</td>
+                                <td>
+                                  <div>
+                                  <textarea id="post_revise_ta${postsId}" class="textarea is-warning" placeholder="Warning textarea" style="display:none">${Contents}</textarea>
+                                  <button id="btn_post_revise_close${postsId}" class="button is-warning" style="cursor: pointer; float:right; display:none" onclick="post_revise_close(${postsId})">닫기</button>
+                                  <button id="btn_post_revise_do${postsId}" class="button is-warning" style="cursor: pointer; float:right; display:none" onclick="post_revise_do(${postsId})">수정</button>
+                                  </div>
+                                  <div id='post_revise_contents${postsId}'>${Contents}
+                                    <button id="btn_post_delete${postsId}" class="button is-warning" style="cursor: pointer; float:right; display:none" onclick="post_delete(${postsId})">삭제</button>
+                                    <button id="btn_post_revise${postsId}" class="button is-warning" style="cursor: pointer; float:right; display:none" onclick="post_revise(${postsId})">수정</button>
+                                  </div>
+                                </td>
                               </tr>`;
               $("#tbbody").append(temp_html);
             }
           },
         });
       }
+
+      function show_post_login(nickname) {
+        $.ajax({
+          type: "get",
+          url: `/api/articles/${articlesId}/post`,
+          data: {},
+          success: function (response) {
+            let rows = response["posts"];
+            for (let i = 0; i < rows.length; i++) {
+              let Writer = rows[i]["Writer"];
+              let Contents = rows[i]["Contents"];
+              let postsId = rows[i]["postsId"];
+
+              let temp_html = `<tr>
+                                <td>${Writer}</td>
+                                <td>
+                                  <div>
+                                  <textarea id="post_revise_ta${postsId}" class="textarea is-warning" placeholder="Warning textarea" style="display:none">${Contents}</textarea>
+                                  <button id="btn_post_revise_close${postsId}" class="button is-warning" style="cursor: pointer; float:right; display:none" onclick="post_revise_close(${postsId})">닫기</button>
+                                  <button id="btn_post_revise_do${postsId}" class="button is-warning" style="cursor: pointer; float:right; display:none" onclick="post_revise_do(${postsId})">수정</button>
+                                  </div>
+                                  <div id='post_revise_contents${postsId}'>${Contents}
+                                    <button id="btn_post_delete${postsId}" class="button is-warning" style="cursor: pointer; float:right; display:none" onclick="post_delete(${postsId})">삭제</button>
+                                    <button id="btn_post_revise${postsId}" class="button is-warning" style="cursor: pointer; float:right; display:none" onclick="post_revise(${postsId})">수정</button>
+                                  <div>
+                                </td>
+                              </tr>`;
+              $("#tbbody").append(temp_html);
+              if (nickname === Writer) {
+                $(`#btn_post_revise${postsId}`).show();
+                $(`#btn_post_delete${postsId}`).show();
+              }
+            }
+          },
+        });
+      }
+
       function post_post() {
         let Contents = $("#post_contents").val();
         if (Contents === "") {
@@ -161,6 +225,7 @@
           },
         });
       }
+
       function post_confirm() {
         $.ajax({
           type: "get",
@@ -175,17 +240,69 @@
           },
         });
       }
+
+      function post_revise(postsId) {
+        $(`#post_revise_ta${postsId}`).show();
+        $(`#btn_post_revise_do${postsId}`).show();
+        $(`#btn_post_revise_close${postsId}`).show();
+        $(`#btn_post_revise${postsId}`).hide();
+        $(`#btn_post_delete${postsId}`).hide();
+        $(`#post_revise_contents${postsId}`).hide();
+      }
+
+      function post_revise_do(postsId) {
+        let Contents = $(`#post_revise_ta${postsId}`).val();
+
+        $.ajax({
+          type: "patch",
+          url: `/api/articles/${articlesId}/post/${postsId}`,
+          data: { Contents: Contents },
+          dataType: "json",
+          headers: {
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          success: function (response) {
+            location.reload();
+          },
+        });
+      }
+
+      function post_revise_close(postsId) {
+        $(`#post_revise_ta${postsId}`).hide();
+        $(`#btn_post_revise_do${postsId}`).hide();
+        $(`#btn_post_revise_close${postsId}`).hide();
+        $(`#btn_post_revise${postsId}`).show();
+        $(`#btn_post_delete${postsId}`).show();
+        $(`#post_revise_contents${postsId}`).show();
+      }
+
+      function post_delete(postsId) {
+        if (confirm("정말로 삭제하시겠습니까?")) {
+          $.ajax({
+            type: "delete",
+            url: `/api/articles/${articlesId}/post/${postsId}`,
+            headers: {
+              authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+            success: function (response) {
+              location.reload();
+            },
+          });
+        }
+      }
     </script>
     <section class="hero is-medium is-warning">
       <div class="hero-body">
         <p class="title" style="cursor: pointer" onclick="location.replace('/')">푸름이의 블로그</p>
-        <button id="btn_write" class="button is-warning" style="display: none" style="cursor: pointer" onclick="location.replace('/write')">글쓰기</button>
-        <button id="btn_logout" class="button is-warning" style="cursor: pointer" onclick="sign_out()">로그아웃</button>
+        <button id="btn_write" class="button is-warning" style="cursor: pointer; display: none" onclick="location.replace('/write')">글쓰기</button>
+        <button id="btn_signup" class="button is-warning" style="cursor: pointer" onclick="location.replace('/signup')">회원가입</button>
+        <button id="btn_login" class="button is-warning" style="cursor: pointer" onclick="location.replace('/signin')">로그인</button>
+        <button id="btn_logout" class="button is-warning" style="cursor: pointer; display: none" onclick="sign_out()">로그아웃</button>
       </div>
     </section>
     <div class="cards"></div>
     <div class="post_write">
-      <input id="post_contents" class="input is-warning" type="text" onclick="post_confirm()" placeholder="Warning input" />
+      <input id="post_contents" class="input is-warning" type="text" onclick="post_confirm()" placeholder="댓글" />
       <button id="btn_post" class="button is-warning" style="cursor: pointer" onclick="post_post()">작성</button>
     </div>
     <div class="table-container">

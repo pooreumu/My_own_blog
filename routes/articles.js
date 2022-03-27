@@ -1,6 +1,7 @@
 const express = require("express");
 const { Op } = require("sequelize");
 const jwt = require("jsonwebtoken");
+const Joi = require("joi");
 const authMiddleware = require("../middlewares/auth-middleware");
 const Articles = require("../schemas/article");
 const Posts = require("../schemas/post");
@@ -10,29 +11,41 @@ const router = express.Router();
 
 connect();
 
+const UsersSchema = Joi.object({
+  nickname: Joi.string().required().min(3).alphanum(),
+  password: Joi.string().required().min(4),
+  confirmPassword: Joi.string().required().min(4),
+});
+
 router.post("/signup", async (req, res) => {
-  const { nickname, password, confirmPassword } = req.body;
+  try {
+    const { nickname, password, confirmPassword } = await UsersSchema.validateAsync(req.body);
 
-  if (password !== confirmPassword) {
-    res.status(400).send({
-      errorMessage: "패스워드가 패스워드 확인란과 동일하지 않습니다.",
+    if (password !== confirmPassword) {
+      res.status(400).send({
+        errorMessage: "패스워드가 패스워드 확인란과 동일하지 않습니다.",
+      });
+      return;
+    }
+    const existUsers = await User.findAll({
+      where: {
+        [Op.or]: [{ nickname }],
+      },
     });
-    return;
-  }
-  const existUsers = await User.findAll({
-    where: {
-      [Op.or]: [{ nickname }],
-    },
-  });
-  if (existUsers.length) {
-    res.status(400).send({
-      errorMessage: "중복된 닉네임입니다.",
-    });
-    return;
-  }
-  const user = await User.create({ nickname, password });
+    if (existUsers.length) {
+      res.status(400).send({
+        errorMessage: "중복된 닉네임입니다.",
+      });
+      return;
+    }
+    const user = await User.create({ nickname, password });
 
-  res.status(201).send({});
+    res.status(201).send({});
+  } catch (err) {
+    res.status(400).send({
+      errorMessage: "닉네임 3자 이상 알파벳과 숫자만",
+    });
+  }
 });
 
 router.post("/auth", async (req, res) => {
@@ -200,9 +213,15 @@ router.get("/articles/:articlesId/post", async (req, res) => {
 
 router.post("/articles/:articlesId/post", authMiddleware, async (req, res) => {
   const { articlesId } = req.params;
-  const { Contents } = req.body;
+  const Contents = req.body.Contents.replace(/\&/g, "&#38;")
+    .replace(/\</g, "&#60;")
+    .replace(/\>/g, "&gt;")
+    .replace(/\$/g, "&#36;")
+    .replace(/\//g, "&#47;")
+    .replace(/\'/g, "&#39;")
+    .replace(/\(/g, "&#40;")
+    .replace(/\)/g, "&#41;");
   const { nickname } = res.locals.user;
-  console.log(nickname);
   const Writer = nickname;
   const date = new Date();
   const time = date.getTime();
@@ -233,5 +252,28 @@ router.post("/articles/:articlesId/post", authMiddleware, async (req, res) => {
   }
 
   res.json({ result: "작성 완료!" });
+});
+
+router.patch("/articles/:articlesId/post/:postsId", authMiddleware, async (req, res) => {
+  const Contents = req.body.Contents.replace(/\&/g, "&#38;")
+    .replace(/\</g, "&#60;")
+    .replace(/\>/g, "&gt;")
+    .replace(/\$/g, "&#36;")
+    .replace(/\//g, "&#47;")
+    .replace(/\'/g, "&#39;")
+    .replace(/\(/g, "&#40;")
+    .replace(/\)/g, "&#41;");
+  const { postsId } = req.params;
+
+  await Posts.updateOne({ postsId: postsId }, { $set: { Contents } });
+  res.json({});
+});
+
+router.delete("/articles/:articlesId/post/:postsId", authMiddleware, async (req, res) => {
+  const { postsId } = req.params;
+
+  await Posts.deleteOne({ postsId: postsId });
+
+  res.json({});
 });
 module.exports = router;
