@@ -40,6 +40,28 @@
       .title {
         width: fit-content;
       }
+      .table-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        margin: 20px auto 0px auto;
+
+        width: 95%;
+        max-width: 500px;
+      }
+      .post_write {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+
+        margin: 20px auto 0px auto;
+
+        width: 95%;
+        max-width: 500px;
+      }
     </style>
   </head>
 
@@ -49,10 +71,14 @@
       const articlesId1 = pathName.split("/");
       const articlesId = articlesId1[2];
       $(document).ready(function () {
+        if (localStorage.getItem("token")) {
+          $("#btn_write").show();
+        }
+        show_article();
         show_post();
       });
 
-      function show_post() {
+      function show_article() {
         $.ajax({
           type: "get",
           url: `/api/articles/${articlesId}`,
@@ -95,14 +121,83 @@
         localStorage.clear();
         window.location.href = "/";
       }
+
+      function show_post() {
+        $.ajax({
+          type: "get",
+          url: `/api/articles/${articlesId}/post`,
+          data: {},
+          success: function (response) {
+            let rows = response["posts"];
+            for (let i = 0; i < rows.length; i++) {
+              let Writer = rows[i]["Writer"];
+              let Contents = rows[i]["Contents"];
+
+              let temp_html = `<tr>
+                                <td>${Writer}</td>
+                                <td>${Contents}</td>
+                              </tr>`;
+              $("#tbbody").append(temp_html);
+            }
+          },
+        });
+      }
+      function post_post() {
+        let Contents = $("#post_contents").val();
+        if (Contents === "") {
+          return alert("댓글 내용을 입력해주세요");
+        }
+        $.ajax({
+          type: "post",
+          url: `/api/articles/${articlesId}/post`,
+          data: { Contents: Contents },
+          dataType: "json",
+          headers: {
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          success: function (response) {
+            alert(response["result"]);
+            location.reload();
+          },
+        });
+      }
+      function post_confirm() {
+        $.ajax({
+          type: "get",
+          url: "/api/users/me",
+          headers: {
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          success: function (response) {},
+          error: function (error) {
+            alert(error.responseJSON.errorMessage);
+            window.location.href = "/signin";
+          },
+        });
+      }
     </script>
     <section class="hero is-medium is-warning">
       <div class="hero-body">
         <p class="title" style="cursor: pointer" onclick="location.replace('/')">푸름이의 블로그</p>
-        <button id="btn_write" class="button is-warning" style="cursor: pointer" onclick="location.replace('/write')">글쓰기</button>
+        <button id="btn_write" class="button is-warning" style="display: none" style="cursor: pointer" onclick="location.replace('/write')">글쓰기</button>
         <button id="btn_logout" class="button is-warning" style="cursor: pointer" onclick="sign_out()">로그아웃</button>
       </div>
     </section>
     <div class="cards"></div>
+    <div class="post_write">
+      <input id="post_contents" class="input is-warning" type="text" onclick="post_confirm()" placeholder="Warning input" />
+      <button id="btn_post" class="button is-warning" style="cursor: pointer" onclick="post_post()">작성</button>
+    </div>
+    <div class="table-container">
+      <table class="table is-bordered is-hoverable is-fullwidth">
+        <thead>
+          <tr>
+            <th><abbr>작성자</abbr></th>
+            <th>내용</th>
+          </tr>
+        </thead>
+        <tbody class="tbbody" id="tbbody"></tbody>
+      </table>
+    </div>
   </body>
 </html>
