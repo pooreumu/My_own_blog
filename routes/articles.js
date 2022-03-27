@@ -198,9 +198,12 @@ router.get("/articles/:articlesId/post", async (req, res) => {
   res.send({ posts });
 });
 
-router.post("/articles/:articlesId/post", async (req, res) => {
+router.post("/articles/:articlesId/post", authMiddleware, async (req, res) => {
   const { articlesId } = req.params;
-  const { Writer, Contents } = req.body;
+  const { Contents } = req.body;
+  const { nickname } = res.locals.user;
+  console.log(nickname);
+  const Writer = nickname;
   const date = new Date();
   const time = date.getTime();
 
