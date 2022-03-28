@@ -77,7 +77,6 @@
           $("#btn_login").hide();
           $("#btn_signup").hide();
         }
-        show_article();
         $.ajax({
           type: "get",
           url: "/api/users/me",
@@ -86,15 +85,17 @@
           },
           success: function (response) {
             const nickname = response["user"]["nickname"];
-            show_post_login(nickname);
+            show_post(nickname);
+            show_article(nickname);
           },
           error: function () {
             show_post();
+            show_article();
           },
         });
       });
 
-      function show_article() {
+      function show_article(nickname) {
         $.ajax({
           type: "get",
           url: `/api/articles/${articlesId}`,
@@ -125,52 +126,24 @@
                                         </div>
                                         <footer class="card-footer">
                                             <p class="card-footer-item">
-                                                <button class="button is-warning" style="cursor:pointer" onclick="location.replace('/revise/${articlesId}')">수정하기</button>
+                                                <button id="btn_revise" class="button is-warning" style="cursor:pointer; display:none" onclick="location.replace('/revise/${articlesId}')">수정하기</button>
                                             </p>
                                         </footer>
                                     </div>`;
             $(".cards").append(temp_html);
-          },
-        });
-      }
-      function sign_out() {
-        localStorage.clear();
-        window.location.reload();
-      }
-
-      function show_post() {
-        $.ajax({
-          type: "get",
-          url: `/api/articles/${articlesId}/post`,
-          data: {},
-          success: function (response) {
-            let rows = response["posts"];
-            for (let i = 0; i < rows.length; i++) {
-              let Writer = rows[i]["Writer"];
-              let Contents = rows[i]["Contents"];
-              let postsId = rows[i]["postsId"];
-
-              let temp_html = `<tr>
-                                <td>${Writer}</td>
-                                <td>
-                                  <div>
-                                  <textarea id="post_revise_ta${postsId}" class="textarea is-warning" placeholder="Warning textarea" style="display:none">${Contents}</textarea>
-                                  <button id="btn_post_revise_close${postsId}" class="button is-warning" style="cursor: pointer; float:right; display:none" onclick="post_revise_close(${postsId})">닫기</button>
-                                  <button id="btn_post_revise_do${postsId}" class="button is-warning" style="cursor: pointer; float:right; display:none" onclick="post_revise_do(${postsId})">수정</button>
-                                  </div>
-                                  <div id='post_revise_contents${postsId}'>${Contents}
-                                    <button id="btn_post_delete${postsId}" class="button is-warning" style="cursor: pointer; float:right; display:none" onclick="post_delete(${postsId})">삭제</button>
-                                    <button id="btn_post_revise${postsId}" class="button is-warning" style="cursor: pointer; float:right; display:none" onclick="post_revise(${postsId})">수정</button>
-                                  </div>
-                                </td>
-                              </tr>`;
-              $("#tbbody").append(temp_html);
+            if (nickname === Writer) {
+              $("#btn_revise").show();
             }
           },
         });
       }
 
-      function show_post_login(nickname) {
+      function sign_out() {
+        localStorage.clear();
+        window.location.reload();
+      }
+
+      function show_post(nickname) {
         $.ajax({
           type: "get",
           url: `/api/articles/${articlesId}/post`,
@@ -193,7 +166,7 @@
                                   <div id='post_revise_contents${postsId}'>${Contents}
                                     <button id="btn_post_delete${postsId}" class="button is-warning" style="cursor: pointer; float:right; display:none" onclick="post_delete(${postsId})">삭제</button>
                                     <button id="btn_post_revise${postsId}" class="button is-warning" style="cursor: pointer; float:right; display:none" onclick="post_revise(${postsId})">수정</button>
-                                  <div>
+                                  </div>
                                 </td>
                               </tr>`;
               $("#tbbody").append(temp_html);
