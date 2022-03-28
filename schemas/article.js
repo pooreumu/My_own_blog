@@ -14,10 +14,6 @@ const articlesSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  PW: {
-    type: Number,
-    required: true,
-  },
   date: {
     type: String,
     required: true,

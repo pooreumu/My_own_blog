@@ -20,12 +20,6 @@
         width: 95%;
         max-width: 500px;
       }
-      .PWPW11 {
-        margin: 20px auto 0px auto;
-
-        width: 95%;
-        max-width: 500px;
-      }
       .btnss {
         margin: 20px auto 0px auto;
 
@@ -68,12 +62,10 @@
           success: function (response) {
             let rows = response["articles"];
             let Title = rows["Title"];
-            let Writer = rows["Writer"];
             let date = rows["date"];
             let contents = rows["Contents"];
 
             let temp_html = `<textarea id="title" class="textarea is-warning" placeholder="제목">${Title}</textarea>
-                                    <textarea id="writer" class="textarea is-warning" placeholder="글쓴이">${Writer}</textarea>
                                     <textarea id="contents" class="textarea is-warning" placeholder="내용">${contents}</textarea>
                                     `;
             $("#revise-box").append(temp_html);
@@ -83,15 +75,12 @@
 
       function revise_order() {
         let Title = $("#title").val();
-        let Writer = $("#writer").val();
-        let pw = $("#pw").val();
-        let PW = Number(pw);
         let Contents = $("#contents").val();
         let date1 = new Date();
         let date = date1.toDateString();
         let time = date1.getTime();
 
-        let data = { Title, Writer, Contents, date, PW, time };
+        let data = { Title, Contents, date, time };
 
         $.ajax({
           type: "put",
@@ -147,9 +136,6 @@
     </section>
     <div class="revise-box1">
       <div id="revise-box" class="revise-box"></div>
-    </div>
-    <div class="PWPW11">
-      <input id="pw" class="input is-warning" type="password" placeholder="비밀번호" />
     </div>
     <div class="btnss">
       <button class="button is-warning" onclick="revise_order()">수정하기</button>

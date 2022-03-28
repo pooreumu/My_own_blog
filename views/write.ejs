@@ -31,25 +31,6 @@
         max-width: 500px;
       }
     </style>
-  </head>
-
-  <body>
-    <section class="hero is-medium is-warning">
-      <div class="hero-body">
-        <p class="title" style="cursor: pointer" onclick="location.replace('/')">푸름이의 블로그</p>
-        <button id="btn_logout" class="button is-warning" style="cursor: pointer" onclick="sign_out()">로그아웃</button>
-      </div>
-    </section>
-    <div class="contentss">
-      <input id="title" class="input is-warning" type="text" placeholder="제목" />
-      <input id="writer" class="input is-warning" type="text" placeholder="글쓴이" />
-      <input id="pw" class="input is-warning" type="password" placeholder="비밀번호" />
-      <textarea id="contents" class="textarea is-warning" placeholder="내용"></textarea>
-    </div>
-    <div class="btnss">
-      <button class="button is-warning" style="cursor: pointer" onclick="save_order()">글쓰기</button>
-      <button class="button is-warning" style="cursor: pointer" onclick="location.replace('/')">닫기</button>
-    </div>
     <script>
       $(document).ready(function () {
         $.ajax({
@@ -69,15 +50,12 @@
       });
       function save_order() {
         let Title = $("#title").val();
-        let Writer = $("#writer").val();
-        let pw = $("#pw").val();
-        let PW = Number(pw);
         let Contents = $("#contents").val();
         let date1 = new Date();
         let date = date1.toDateString();
         let time = date1.getTime();
 
-        let data = { Title, Writer, PW, Contents, date, time };
+        let data = { Title, Contents, date, time };
 
         $.ajax({
           type: "post",
@@ -98,5 +76,22 @@
         window.location.href = "/";
       }
     </script>
+  </head>
+
+  <body>
+    <section class="hero is-medium is-warning">
+      <div class="hero-body">
+        <p class="title" style="cursor: pointer" onclick="location.replace('/')">푸름이의 블로그</p>
+        <button id="btn_logout" class="button is-warning" style="cursor: pointer" onclick="sign_out()">로그아웃</button>
+      </div>
+    </section>
+    <div class="contentss">
+      <input id="title" class="input is-warning" type="text" placeholder="제목" />
+      <textarea id="contents" class="textarea is-warning" placeholder="내용"></textarea>
+    </div>
+    <div class="btnss">
+      <button class="button is-warning" style="cursor: pointer" onclick="save_order()">글쓰기</button>
+      <button class="button is-warning" style="cursor: pointer" onclick="location.replace('/')">닫기</button>
+    </div>
   </body>
 </html>

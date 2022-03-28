@@ -118,7 +118,6 @@ router.post("/articles", authMiddleware, async (req, res) => {
       articlesId,
       Title,
       Writer,
-      PW,
       date,
       Contents,
       time,
@@ -130,7 +129,6 @@ router.post("/articles", authMiddleware, async (req, res) => {
       articlesId,
       Title,
       Writer,
-      PW,
       date,
       Contents,
       time,
@@ -152,9 +150,9 @@ router.delete("/articles/:articlesId", authMiddleware, async (req, res) => {
   const { articlesId } = req.params;
   const { PW } = req.body;
 
-  const pwCheck = await Articles.find({ articlesId: Number(articlesId) });
+  const Check = await Articles.find({ articlesId: Number(articlesId) });
 
-  if (pwCheck[0]["PW"] === Number(PW)) {
+  if (Check) {
     await Articles.deleteOne({ articlesId: Number(articlesId) });
     res.json({ result: "success" });
   } else {
@@ -162,19 +160,10 @@ router.delete("/articles/:articlesId", authMiddleware, async (req, res) => {
   }
 });
 
-router.put("/articles/:articlesId", authMiddleware, async (req, res) => {
+router.patch("/articles/:articlesId", authMiddleware, async (req, res) => {
   const { articlesId } = req.params;
 
   const Title = req.body.Title.replace(/\&/g, "&#38;")
-    .replace(/\</g, "&#60;")
-    .replace(/\>/g, "&gt;")
-    .replace(/\$/g, "&#36;")
-    .replace(/\//g, "&#47;")
-    .replace(/\'/g, "&#39;")
-    .replace(/\(/g, "&#40;")
-    .replace(/\)/g, "&#41;");
-
-  const Writer = req.body.Writer.replace(/\&/g, "&#38;")
     .replace(/\</g, "&#60;")
     .replace(/\>/g, "&gt;")
     .replace(/\$/g, "&#36;")
@@ -194,10 +183,10 @@ router.put("/articles/:articlesId", authMiddleware, async (req, res) => {
 
   const { PW, date, time } = req.body;
 
-  const pwCheck = await Articles.find({ articlesId: Number(articlesId) });
+  const Check = await Articles.find({ articlesId: Number(articlesId) });
 
-  if (pwCheck[0]["PW"] === Number(PW)) {
-    await Articles.updateOne({ articlesId: Number(articlesId) }, { $set: { Title, Writer, date, Contents, time } });
+  if (Check) {
+    await Articles.updateOne({ articlesId: Number(articlesId) }, { $set: { Title, date, Contents, time } });
     res.json({ result: "success" });
   } else {
     res.json({ result: "fail" });
