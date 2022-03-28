@@ -1,4 +1,5 @@
 const Articles = require("../schemas/article");
+const Posts = require("../schemas/post");
 
 async function showArticles(req, res) {
   const articles = await Articles.find().sort("-time");
@@ -99,6 +100,7 @@ async function deleteArticles(req, res) {
 
   if (Check) {
     await Articles.deleteOne({ articlesId: Number(articlesId) });
+    await Posts.deleteMany({ articlesId });
     res.json({ result: "success" });
   } else {
     res.json({ result: "fail" });
