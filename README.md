@@ -1,6 +1,6 @@
 # My_own_blog
 
-Node.js와 express로 로그인 기능이 없는 나만의 항해 블로그
+Node.js와 express로 나만의 항해 블로그
 http://pooreum.shop
 
 1. 전체 게시글 목록 조회 페이지
