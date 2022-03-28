@@ -1,18 +1,15 @@
 const express = require("express");
 const ejs = require("ejs");
-const jwt = require("jsonwebtoken");
-const authMiddleware = require("./middlewares/auth-middleware");
-const Articles = require("./schemas/article");
 const connect = require("./schemas");
-const router = express.Router();
 require("dotenv").config();
 
 connect();
 
 const app = express();
-const port = 3000;
 
 const articleRouter = require("./routes/articles");
+const authRouter = require("./routes/auth");
+const postRouter = require("./routes/posts");
 
 const request_middleware = (req, res, next) => {
   console.log("Request URL:", req.originalUrl, " - ", new Date());
@@ -23,7 +20,7 @@ app.use(request_middleware);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.engine("ejs", ejs.renderFile);
-app.use("/api", articleRouter);
+app.use("/api", [articleRouter, authRouter, postRouter]);
 
 app.get("/", (req, res) => {
   res.render("list.ejs");
@@ -49,6 +46,4 @@ app.get("/signin", (req, res) => {
   res.render("signin.ejs");
 });
 
-app.listen(port, () => {
-  console.log(port, "포트로 서버가 켜졌어요!");
-});
+module.exports = app;

@@ -83,7 +83,7 @@
         let data = { Title, Contents, date, time };
 
         $.ajax({
-          type: "put",
+          type: "patch",
           url: `/api/articles/${articlesId}`,
           data: data,
           dataType: "json",

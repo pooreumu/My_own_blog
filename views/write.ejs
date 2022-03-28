@@ -39,9 +39,7 @@
           headers: {
             authorization: `Bearer ${localStorage.getItem("token")}`,
           },
-          success: function (response) {
-            console.log(response["user"]["nickname"]);
-          },
+          success: function (response) {},
           error: function (error) {
             alert(error.responseJSON.errorMessage);
             window.location.href = "/signin";
