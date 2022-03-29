@@ -1,10 +1,13 @@
 const Articles = require("../schemas/article");
 const Posts = require("../schemas/post");
+const { Likes } = require("../models");
+const { Op } = require("sequelize");
 
 async function showArticles(req, res) {
   const articles = await Articles.find().sort("-time");
   res.send({ articles });
 }
+
 async function writeArticles(req, res) {
   const { nickname } = res.locals.user;
   const Writer = nickname;
@@ -25,6 +28,7 @@ async function writeArticles(req, res) {
     .replace(/\(/g, "&#40;")
     .replace(/\)/g, "&#41;");
   const { date, time } = req.body;
+  const likes = 0;
 
   const articlesId1 = await Articles.find().sort("-articlesId");
 
@@ -39,6 +43,7 @@ async function writeArticles(req, res) {
       date,
       Contents,
       time,
+      likes,
     });
   } else {
     const articlesId = 1;
@@ -50,6 +55,7 @@ async function writeArticles(req, res) {
       date,
       Contents,
       time,
+      likes,
     });
   }
 
@@ -57,10 +63,17 @@ async function writeArticles(req, res) {
 }
 async function showArticle(req, res) {
   const { articlesId } = req.params;
-
   const articles = await Articles.findOne({ articlesId });
+  try {
+    const nickname = req.query.nickname;
 
-  res.send({ articles });
+    const { done } = await Likes.findOne({ where: { articlesId, nickname } });
+
+    res.send({ articles, done });
+  } catch (err) {
+    const done = 0;
+    res.send({ articles, done });
+  }
 }
 async function reviseArticles(req, res) {
   const { articlesId } = req.params;
@@ -84,9 +97,9 @@ async function reviseArticles(req, res) {
 
   const { date, time } = req.body;
 
-  const Check = await Articles.find({ articlesId: Number(articlesId) });
+  const check = await Articles.find({ articlesId: Number(articlesId) });
 
-  if (Check) {
+  if (check) {
     await Articles.updateOne({ articlesId: Number(articlesId) }, { $set: { Title, date, Contents, time } });
     res.json({ result: "success" });
   } else {
@@ -96,9 +109,9 @@ async function reviseArticles(req, res) {
 async function deleteArticles(req, res) {
   const { articlesId } = req.params;
 
-  const Check = await Articles.find({ articlesId: Number(articlesId) });
+  const check = await Articles.find({ articlesId: Number(articlesId) });
 
-  if (Check) {
+  if (check) {
     await Articles.deleteOne({ articlesId: Number(articlesId) });
     await Posts.deleteMany({ articlesId });
     res.json({ result: "success" });
@@ -107,4 +120,29 @@ async function deleteArticles(req, res) {
   }
 }
 
-module.exports = { showArticles, writeArticles, showArticle, reviseArticles, deleteArticles };
+async function likesArticles(req, res) {
+  const { articlesId } = req.params;
+  const { nickname } = res.locals.user;
+  let { likes } = await Articles.findOne({ articlesId });
+  console.log(articlesId);
+  console.log(1);
+  try {
+    const { done, id } = await Likes.findOne({ where: { articlesId, nickname } });
+    if (done) {
+      await Likes.update({ done: 0 }, { where: { id } });
+      likes--;
+    } else {
+      await Likes.update({ done: 1 }, { where: { id } });
+      likes++;
+    }
+    await Articles.updateOne({ articlesId: Number(articlesId) }, { $set: { likes } });
+    res.send({});
+  } catch (err) {
+    likes++;
+    await Likes.create({ articlesId, nickname, done: 1 });
+    await Articles.updateOne({ articlesId: Number(articlesId) }, { $set: { likes } });
+    res.send({});
+  }
+}
+
+module.exports = { showArticles, writeArticles, showArticle, reviseArticles, deleteArticles, likesArticles };

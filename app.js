@@ -16,6 +16,14 @@ const request_middleware = (req, res, next) => {
   next();
 };
 
+function removeHeader() {
+  return function (req, res, next) {
+    res.removeHeader("X-Powered-By");
+    next();
+  };
+}
+
+app.use(removeHeader()); //x-Powerd-By 제거
 app.use(request_middleware);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

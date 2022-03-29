@@ -11,6 +11,9 @@
     <!-- bulma -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css" />
 
+    <!-- font-awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+
     <title>푸름이의 블로그</title>
 
     <style>
@@ -99,13 +102,15 @@
         $.ajax({
           type: "get",
           url: `/api/articles/${articlesId}`,
-          data: {},
+          data: { nickname: nickname },
           success: function (response) {
             let rows = response["articles"];
             let Title = rows["Title"];
             let Writer = rows["Writer"];
             let Contents = rows["Contents"];
             let date = rows["date"];
+            let likes = rows["likes"];
+            let done = response["done"];
 
             let temp_html = `<div class="card">
                                         <div class="card-content">
@@ -115,6 +120,13 @@
                                             <p class="subtitle">
                                                 ${Contents}
                                             </p>
+                                            <span class="icon-text">
+                                              <span class="icon" >
+                                                <i id="btn_likes_solid" onclick="clickDislikes(${articlesId})" style="cursor:pointer; display:none" class="fa-solid fa-thumbs-up"></i>
+                                                <i id="btn_likes_regular" onclick="clickLikes(${articlesId})" style="cursor:pointer;" class="fa-regular fa-thumbs-up"></i>
+                                              </span>
+                                              <span>${likes}</span>
+                                            </span>
                                             <div>
                                                 <p>
                                                     작성자: ${Writer}
@@ -131,6 +143,10 @@
                                         </footer>
                                     </div>`;
             $(".cards").append(temp_html);
+            if (done) {
+              $("#btn_likes_solid").show();
+              $("#btn_likes_regular").hide();
+            }
             if (nickname === Writer) {
               $("#btn_revise").show();
             }
@@ -262,6 +278,61 @@
             },
           });
         }
+      }
+
+      function clickLikes(articlesId) {
+        $.ajax({
+          type: "get",
+          url: "/api/users/me",
+          headers: {
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          success: function (response) {
+            $.ajax({
+              type: "patch",
+              url: `/api/articles/${articlesId}/likes`,
+              headers: {
+                authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+              success: function (response) {
+                $("#btn_likes_regular").hide();
+                $("#btn_likes_solid").show();
+                location.reload();
+              },
+            });
+          },
+          error: function (error) {
+            alert(error.responseJSON.errorMessage);
+            window.location.href = "/signin";
+          },
+        });
+      }
+      function clickDislikes(articlesId) {
+        $.ajax({
+          type: "get",
+          url: "/api/users/me",
+          headers: {
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          success: function (response) {
+            $.ajax({
+              type: "patch",
+              url: `/api/articles/${articlesId}/likes`,
+              headers: {
+                authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+              success: function (response) {
+                $("#btn_likes_regular").show();
+                $("#btn_likes_solid").hide();
+                location.reload();
+              },
+            });
+          },
+          error: function (error) {
+            alert(error.responseJSON.errorMessage);
+            window.location.href = "/signin";
+          },
+        });
       }
     </script>
     <section class="hero is-medium is-warning">

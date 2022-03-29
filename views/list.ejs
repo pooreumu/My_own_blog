@@ -11,6 +11,9 @@
     <!-- bulma -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css" />
 
+    <!-- font-awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+
     <title>푸름이의 블로그</title>
 
     <style>
@@ -46,6 +49,20 @@
           $("#btn_login").hide();
           $("#btn_signup").hide();
           $("#btn_logout").show();
+          // $.ajax({
+          //   type: "get",
+          //   url: "/api/users/me",
+          //   headers: {
+          //     authorization: `Bearer ${localStorage.getItem("token")}`,
+          //   },
+          //   success: function (response) {
+          //     const nickname = response["user"]["nickname"];
+          //     show_list(nickname);
+          //   },
+          //   error: function () {
+          //     show_list();
+          //   },
+          // });
         } else {
           $("#btn_write").hide();
         }
@@ -59,12 +76,21 @@
           data: {},
           success: function (response) {
             let rows = response["articles"];
+            // let dones = response["done"];
             for (let i = 0; i < rows.length; i++) {
-              let articlesId1 = rows[i]["articlesId"];
-              let articlesId = Number(articlesId1);
+              let articlesId = rows[i]["articlesId"];
               let Title = rows[i]["Title"];
               let Writer = rows[i]["Writer"];
               let date = rows[i]["date"];
+              // let likes = rows[i]["likes"];
+              // let done = dones[i];
+              // <span class="icon-text" style="float:right">
+              //                                         <span class="icon" >
+              //                                           <i id="btn_likes_solid${articlesId}" onclick="clickDislikes(${articlesId})" style="cursor:pointer; display:none" class="fa-solid fa-thumbs-up"></i>
+              //                                           <i id="btn_likes_regular${articlesId}" onclick="clickLikes(${articlesId})" style="cursor:pointer;" class="fa-regular fa-thumbs-up"></i>
+              //                                         </span>
+              //                                         <span>${likes}</span>
+              //                                       </span>
 
               let temp_html = `<div class="card-box" id="card-box" style="cursor:pointer" onclick="location.href='/detail/${articlesId}'">
                                             <div class="card-content">
@@ -82,6 +108,10 @@
                                             </footer>
                                         </div>`;
               $("#cards").append(temp_html);
+              // if (done) {
+              //   $(`#btn_likes_solid${articlesId}`).show();
+              //   $(`#btn_likes_regular${articlesId}`).hide();
+              // }
             }
           },
         });

@@ -26,6 +26,10 @@ const articlesSchema = mongoose.Schema({
     type: Number,
     required: true,
   },
+  likes: {
+    type: Number,
+    required: true,
+  },
 });
 
 module.exports = mongoose.model("Articles", articlesSchema);
