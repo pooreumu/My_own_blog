@@ -75,6 +75,13 @@ async function revisePost(req, res) {
 
 async function deletePost(req, res) {
   const { postsId } = req.params;
+  const { nickname } = res.locals.user;
+  const { Writer } = await Posts.findOne({ postsId });
+  console.log(nickname);
+  console.log(Writer);
+  if (nickname !== Writer) {
+    return res.send("Fuck You");
+  }
 
   await Posts.deleteOne({ postsId: postsId });
 
