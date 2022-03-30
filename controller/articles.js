@@ -1,7 +1,7 @@
 const Articles = require("../schemas/article");
 const Posts = require("../schemas/post");
 const { Likes } = require("../models");
-const { Op } = require("sequelize");
+const jwt = require("jsonwebtoken");
 
 async function showArticles(req, res) {
   const articles = await Articles.find().sort("-time");
@@ -78,6 +78,13 @@ async function showArticle(req, res) {
 }
 async function reviseArticles(req, res) {
   const { articlesId } = req.params;
+  const { nickname } = res.locals.user;
+  const { Writer } = await Articles.findOne({ articlesId });
+  console.log(nickname);
+  console.log(Writer);
+  if (nickname !== Writer) {
+    return res.send("Fuck You");
+  }
 
   const Title = req.body.Title.replace(/\&/g, "&#38;")
     .replace(/\</g, "&#60;")
@@ -109,6 +116,13 @@ async function reviseArticles(req, res) {
 }
 async function deleteArticles(req, res) {
   const { articlesId } = req.params;
+  const { nickname } = res.locals.user;
+  const { Writer } = await Articles.findOne({ articlesId });
+  console.log(nickname);
+  console.log(Writer);
+  if (nickname !== Writer) {
+    return res.send("Fuck You");
+  }
 
   const check = await Articles.find({ articlesId: Number(articlesId) });
 

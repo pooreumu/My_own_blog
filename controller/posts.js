@@ -9,6 +9,7 @@ async function showPost(req, res) {
 
 async function writePost(req, res) {
   const { articlesId } = req.params;
+
   const Contents = req.body.Contents.replace(/\&/g, "&#38;")
     .replace(/\</g, "&#60;")
     .replace(/\>/g, "&gt;")
@@ -51,6 +52,14 @@ async function writePost(req, res) {
 }
 
 async function revisePost(req, res) {
+  const { postsId } = req.params;
+  const { nickname } = res.locals.user;
+  const { Writer } = await Posts.findOne({ postsId });
+  console.log(nickname);
+  console.log(Writer);
+  if (nickname !== Writer) {
+    return res.send("Fuck You");
+  }
   const Contents = req.body.Contents.replace(/\&/g, "&#38;")
     .replace(/\</g, "&#60;")
     .replace(/\>/g, "&gt;")
@@ -59,7 +68,6 @@ async function revisePost(req, res) {
     .replace(/\'/g, "&#39;")
     .replace(/\(/g, "&#40;")
     .replace(/\)/g, "&#41;");
-  const { postsId } = req.params;
 
   await Posts.updateOne({ postsId: postsId }, { $set: { Contents } });
   res.json({});
