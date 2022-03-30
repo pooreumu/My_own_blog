@@ -75,7 +75,13 @@
 
       function revise_order() {
         let Title = $("#title").val();
+        if (Title === "") {
+          return alert("제목을 입력해주세요");
+        }
         let Contents = $("#contents").val();
+        if (Contents === "") {
+          return alert("내용을 입력해주세요");
+        }
         let date1 = new Date();
         let date = date1.toDateString();
         let time = date1.getTime();

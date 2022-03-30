@@ -241,6 +241,9 @@
 
       function post_revise_do(postsId) {
         let Contents = $(`#post_revise_ta${postsId}`).val();
+        if (Contents === "") {
+          return alert("댓글 내용을 입력해주세요");
+        }
 
         $.ajax({
           type: "patch",
