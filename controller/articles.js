@@ -5,6 +5,7 @@ const { Op } = require("sequelize");
 
 async function showArticles(req, res) {
   const articles = await Articles.find().sort("-time");
+
   res.send({ articles });
 }
 

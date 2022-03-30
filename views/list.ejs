@@ -40,29 +40,13 @@
         width: fit-content;
       }
     </style>
-  </head>
 
-  <body>
     <script>
       $(document).ready(function () {
         if (localStorage.getItem("token")) {
           $("#btn_login").hide();
           $("#btn_signup").hide();
           $("#btn_logout").show();
-          // $.ajax({
-          //   type: "get",
-          //   url: "/api/users/me",
-          //   headers: {
-          //     authorization: `Bearer ${localStorage.getItem("token")}`,
-          //   },
-          //   success: function (response) {
-          //     const nickname = response["user"]["nickname"];
-          //     show_list(nickname);
-          //   },
-          //   error: function () {
-          //     show_list();
-          //   },
-          // });
         } else {
           $("#btn_write").hide();
         }
@@ -76,42 +60,36 @@
           data: {},
           success: function (response) {
             let rows = response["articles"];
-            // let dones = response["done"];
             for (let i = 0; i < rows.length; i++) {
+              console.log(rows[i]);
               let articlesId = rows[i]["articlesId"];
               let Title = rows[i]["Title"];
               let Writer = rows[i]["Writer"];
               let date = rows[i]["date"];
-              // let likes = rows[i]["likes"];
-              // let done = dones[i];
-              // <span class="icon-text" style="float:right">
-              //                                         <span class="icon" >
-              //                                           <i id="btn_likes_solid${articlesId}" onclick="clickDislikes(${articlesId})" style="cursor:pointer; display:none" class="fa-solid fa-thumbs-up"></i>
-              //                                           <i id="btn_likes_regular${articlesId}" onclick="clickLikes(${articlesId})" style="cursor:pointer;" class="fa-regular fa-thumbs-up"></i>
-              //                                         </span>
-              //                                         <span>${likes}</span>
-              //                                       </span>
+              let likes = rows[i]["likes"];
 
-              let temp_html = `<div class="card-box" id="card-box" style="cursor:pointer" onclick="location.href='/detail/${articlesId}'">
-                                            <div class="card-content">
-                                                <p class="title">
-                                                    제목: ${Title}
-                                                </p>
-                                                <p class="subtitle">
-                                                    작성자: ${Writer}
-                                                </p>
-                                            </div>
-                                            <footer class="card-footer">
-                                                <div>
-                                                    ${date}
-                                                </div>
-                                            </footer>
-                                        </div>`;
+              let temp_html = `<div class="card-box" id="card-box" >
+                                <div class="card-content"style="cursor:pointer" onclick="location.href='/detail/${articlesId}'">
+                                  <p class="title">
+                                    제목: ${Title}
+                                    </p>
+                                  <p class="subtitle">
+                                      작성자: ${Writer}
+                                  </p>
+                                </div>
+                                <footer class="card-footer">
+                                  <div>
+                                      ${date}
+                                  </div>
+                                  <span class="icon-text" style="float:right">
+                                    <span class="icon">
+                                        <i id="btn_likes_regular${articlesId}" class="fa-regular fa-thumbs-up"></i>
+                                    </span>
+                                      <span>${likes}</span>
+                                  </span>
+                                </footer>
+                              </div>`;
               $("#cards").append(temp_html);
-              // if (done) {
-              //   $(`#btn_likes_solid${articlesId}`).show();
-              //   $(`#btn_likes_regular${articlesId}`).hide();
-              // }
             }
           },
         });
@@ -121,6 +99,9 @@
         window.location.href = "/";
       }
     </script>
+  </head>
+
+  <body>
     <section class="hero is-medium is-warning">
       <div class="hero-body">
         <p class="title" style="cursor: pointer" onclick="location.replace('/')">푸름이의 블로그</p>
