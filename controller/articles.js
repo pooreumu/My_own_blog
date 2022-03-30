@@ -1,7 +1,6 @@
 const Articles = require("../schemas/article");
 const Posts = require("../schemas/post");
 const { Likes } = require("../models");
-const jwt = require("jsonwebtoken");
 
 async function showArticles(req, res) {
   const articles = await Articles.find().sort("-time");

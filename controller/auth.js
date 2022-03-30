@@ -24,12 +24,18 @@ async function sign_up(req, res) {
       });
       return;
     }
+    if (password.indexOf(nickname) !== -1) {
+      res.status(400).send({
+        errorMessage: "사용할 수 없는 암호입니다",
+      });
+      return;
+    }
     await User.create({ nickname, password });
 
     res.status(201).send({});
   } catch (err) {
     res.status(400).send({
-      errorMessage: "닉네임 3자 이상 알파벳과 숫자만",
+      errorMessage: "닉네임이나 암호가 맘에 안듬",
     });
   }
 }
