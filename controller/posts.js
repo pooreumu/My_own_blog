@@ -4,7 +4,7 @@ async function showPost(req, res) {
   const { articlesId } = req.params;
   const posts = await Posts.find({ articlesId: articlesId }).sort("-time");
 
-  res.send({ posts });
+  res.json({ posts });
 }
 
 async function writePost(req, res) {
@@ -55,8 +55,6 @@ async function revisePost(req, res) {
   const { postsId } = req.params;
   const { nickname } = res.locals.user;
   const { Writer } = await Posts.findOne({ postsId });
-  console.log(nickname);
-  console.log(Writer);
   if (nickname !== Writer) {
     return res.send("Fuck You");
   }
@@ -77,8 +75,6 @@ async function deletePost(req, res) {
   const { postsId } = req.params;
   const { nickname } = res.locals.user;
   const { Writer } = await Posts.findOne({ postsId });
-  console.log(nickname);
-  console.log(Writer);
   if (nickname !== Writer) {
     return res.send("Fuck You");
   }

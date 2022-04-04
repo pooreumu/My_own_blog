@@ -7,7 +7,7 @@ module.exports = (req, res, next) => {
   const token_key = process.env.JWT_KEY;
 
   if (tokenType !== "Bearer") {
-    res.status(401).send({
+    res.status(401).json({
       errorMessage: "로그인 후 사용하세요",
     });
     return;
@@ -20,7 +20,7 @@ module.exports = (req, res, next) => {
       next();
     });
   } catch (error) {
-    res.status(401).send({
+    res.status(401).json({
       errorMessage: "로그인 후 사용하세요",
     });
     return;

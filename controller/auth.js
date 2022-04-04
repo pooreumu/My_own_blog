@@ -8,7 +8,7 @@ async function sign_up(req, res) {
     const { nickname, password, confirmPassword } = await UsersSchema.validateAsync(req.body);
 
     if (password !== confirmPassword) {
-      res.status(400).send({
+      res.status(400).json({
         errorMessage: "패스워드가 패스워드 확인란과 동일하지 않습니다.",
       });
       return;
@@ -19,23 +19,23 @@ async function sign_up(req, res) {
       },
     });
     if (existUsers.length) {
-      res.status(400).send({
+      res.status(400).json({
         errorMessage: "중복된 닉네임입니다.",
       });
       return;
     }
     if (password.indexOf(nickname) !== -1) {
-      res.status(400).send({
+      res.status(400).json({
         errorMessage: "사용할 수 없는 암호입니다",
       });
       return;
     }
     await User.create({ nickname, password });
 
-    res.status(201).send({});
+    res.status(201).json({});
   } catch (err) {
-    res.status(400).send({
-      errorMessage: "닉네임이나 암호가 맘에 안듬",
+    res.status(400).json({
+      errorMessage: "닉네임 영어나 숫자만 3자이상, 암호4자이상",
     });
   }
 }
@@ -46,7 +46,7 @@ async function sign_in(req, res) {
   const user = await User.findOne({ where: { nickname, password } });
 
   if (!user) {
-    res.status(401).send({
+    res.status(401).json({
       errorMessage: "닉네임 또는 패스워드를 확인해주세요",
     });
     return;
@@ -54,12 +54,12 @@ async function sign_in(req, res) {
   const token_key = process.env.JWT_KEY;
   const token = jwt.sign({ userId: user.userId }, token_key);
 
-  res.send({ token });
+  res.json({ token });
 }
 
 async function auth(req, res) {
   const { user } = res.locals;
-  res.send({
+  res.json({
     user: {
       nickname: user.nickname,
     },
