@@ -1,0 +1,524 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "My API",
+    "description": "Description",
+    "version": "1.0.0"
+  },
+  "host": "localhost:undefined",
+  "basePath": "/",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "tags": [
+          "GET"
+        ],
+        "summary": "겟 조회",
+        "description": "여기는 겟을 보여주는 곳 입니다.",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/detail/{articlesId}": {
+      "get": {
+        "tags": [
+          "GET"
+        ],
+        "summary": "겟 조회",
+        "description": "여기는 겟을 보여주는 곳 입니다.",
+        "parameters": [
+          {
+            "name": "articlesId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/write": {
+      "get": {
+        "tags": [
+          "GET"
+        ],
+        "summary": "겟 조회",
+        "description": "여기는 겟을 보여주는 곳 입니다.",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/revise/{articlesId}": {
+      "get": {
+        "tags": [
+          "GET"
+        ],
+        "summary": "겟 조회",
+        "description": "여기는 겟을 보여주는 곳 입니다.",
+        "parameters": [
+          {
+            "name": "articlesId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/signup": {
+      "get": {
+        "tags": [
+          "GET"
+        ],
+        "summary": "겟 조회",
+        "description": "여기는 겟을 보여주는 곳 입니다.",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/signin": {
+      "get": {
+        "tags": [
+          "GET"
+        ],
+        "summary": "겟 조회",
+        "description": "여기는 겟을 보여주는 곳 입니다.",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/articles": {
+      "post": {
+        "tags": [
+          "POST"
+        ],
+        "summary": "포스트 조회",
+        "description": "여기는 포스트를 보여주는 곳 입니다.",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "nickname",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "Title": {
+                  "example": "any"
+                },
+                "Contents": {
+                  "example": "any"
+                },
+                "date": {
+                  "example": "any"
+                },
+                "time": {
+                  "example": "any"
+                },
+                "where": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "GET"
+        ],
+        "summary": "겟 조회",
+        "description": "여기는 겟을 보여주는 곳 입니다.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/articles/{articlesId}": {
+      "get": {
+        "tags": [
+          "GET"
+        ],
+        "summary": "겟 조회",
+        "description": "여기는 겟을 보여주는 곳 입니다.",
+        "parameters": [
+          {
+            "name": "articlesId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "nickname",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "PATCH"
+        ],
+        "summary": "패치 조회",
+        "description": "여기는 패치를 보여주는 곳 입니다.",
+        "parameters": [
+          {
+            "name": "articlesId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "Title": {
+                  "example": "any"
+                },
+                "Contents": {
+                  "example": "any"
+                },
+                "date": {
+                  "example": "any"
+                },
+                "time": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "DELETE"
+        ],
+        "summary": "딜리트 조회",
+        "description": "여기는 딜리트를 보여주는 곳 입니다.",
+        "parameters": [
+          {
+            "name": "articlesId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/articles/{articlesId}/likes": {
+      "patch": {
+        "tags": [
+          "PATCH"
+        ],
+        "summary": "패치 조회",
+        "description": "여기는 패치를 보여주는 곳 입니다.",
+        "parameters": [
+          {
+            "name": "articlesId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/signup": {
+      "post": {
+        "tags": [
+          "POST"
+        ],
+        "summary": "포스트 조회",
+        "description": "여기는 포스트를 보여주는 곳 입니다.",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/api/auth": {
+      "post": {
+        "tags": [
+          "POST"
+        ],
+        "summary": "포스트 조회",
+        "description": "여기는 포스트를 보여주는 곳 입니다.",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "nickname": {
+                  "example": "any"
+                },
+                "password": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/users/me": {
+      "get": {
+        "tags": [
+          "GET"
+        ],
+        "summary": "겟 조회",
+        "description": "여기는 겟을 보여주는 곳 입니다.",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/articles/{articlesId}/post": {
+      "get": {
+        "tags": [
+          "GET"
+        ],
+        "summary": "겟 조회",
+        "description": "여기는 겟을 보여주는 곳 입니다.",
+        "parameters": [
+          {
+            "name": "articlesId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "POST"
+        ],
+        "summary": "포스트 조회",
+        "description": "여기는 포스트를 보여주는 곳 입니다.",
+        "parameters": [
+          {
+            "name": "articlesId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "Contents": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/articles/{articlesId}/post/{postsId}": {
+      "patch": {
+        "tags": [
+          "PATCH"
+        ],
+        "summary": "패치 조회",
+        "description": "여기는 패치를 보여주는 곳 입니다.",
+        "parameters": [
+          {
+            "name": "articlesId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "postsId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "Contents": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "DELETE"
+        ],
+        "summary": "딜리트 조회",
+        "description": "여기는 딜리트를 보여주는 곳 입니다.",
+        "parameters": [
+          {
+            "name": "articlesId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "postsId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    }
+  }
+}

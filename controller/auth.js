@@ -4,6 +4,9 @@ const UsersSchema = require("../middlewares/joi");
 const jwt = require("jsonwebtoken");
 
 async function sign_up(req, res) {
+  // #swagger.description = "여기는 포스트를 보여주는 곳 입니다."
+  // #swagger.tags = ["POST"]
+  // #swagger.summary = "포스트 조회"
   try {
     const { nickname, password, confirmPassword } = await UsersSchema.validateAsync(req.body);
 
@@ -41,6 +44,9 @@ async function sign_up(req, res) {
 }
 
 async function sign_in(req, res) {
+  // #swagger.description = "여기는 포스트를 보여주는 곳 입니다."
+  // #swagger.tags = ["POST"]
+  // #swagger.summary = "포스트 조회"
   const { nickname, password } = req.body;
 
   const user = await User.findOne({ where: { nickname, password } });
@@ -58,6 +64,9 @@ async function sign_in(req, res) {
 }
 
 async function auth(req, res) {
+  // #swagger.description = "여기는 겟을 보여주는 곳 입니다."
+  // #swagger.tags = ["GET"]
+  // #swagger.summary = "겟 조회"
   const { user } = res.locals;
   res.json({
     user: {

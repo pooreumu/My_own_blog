@@ -3,12 +3,18 @@ const Posts = require("../schemas/post");
 const { Likes } = require("../models");
 
 async function showArticles(req, res) {
+  // #swagger.description = "여기는 겟을 보여주는 곳 입니다."
+  // #swagger.tags = ["GET"]
+  // #swagger.summary = "겟 조회"
   const articles = await Articles.find().sort("-time");
 
   res.json({ articles });
 }
 
 async function writeArticles(req, res) {
+  // #swagger.description = "여기는 포스트를 보여주는 곳 입니다."
+  // #swagger.tags = ["POST"]
+  // #swagger.summary = "포스트 조회"
   const { nickname } = res.locals.user;
   const Writer = nickname;
   const Title = req.body.Title.replace(/\&/g, "&#38;")
@@ -62,6 +68,9 @@ async function writeArticles(req, res) {
   res.json({ result: "작성 완료!" });
 }
 async function showArticle(req, res) {
+  // #swagger.description = "여기는 겟을 보여주는 곳 입니다."
+  // #swagger.tags = ["GET"]
+  // #swagger.summary = "겟 조회"
   const { articlesId } = req.params;
   const articles = await Articles.findOne({ articlesId });
   try {
@@ -76,6 +85,9 @@ async function showArticle(req, res) {
   }
 }
 async function reviseArticles(req, res) {
+  // #swagger.description = "여기는 패치를 보여주는 곳 입니다."
+  // #swagger.tags = ["PATCH"]
+  // #swagger.summary = "패치 조회"
   const { articlesId } = req.params;
   const { nickname } = res.locals.user;
   const { Writer } = await Articles.findOne({ articlesId });
@@ -112,6 +124,9 @@ async function reviseArticles(req, res) {
   }
 }
 async function deleteArticles(req, res) {
+  // #swagger.description = "여기는 딜리트를 보여주는 곳 입니다."
+  // #swagger.tags = ["DELETE"]
+  // #swagger.summary = "딜리트 조회"
   const { articlesId } = req.params;
   const { nickname } = res.locals.user;
   const { Writer } = await Articles.findOne({ articlesId });
@@ -131,6 +146,9 @@ async function deleteArticles(req, res) {
 }
 
 async function likesArticles(req, res) {
+  // #swagger.description = "여기는 패치를 보여주는 곳 입니다."
+  // #swagger.tags = ["PATCH"]
+  // #swagger.summary = "패치 조회"
   const { articlesId } = req.params;
   const { nickname } = res.locals.user;
   let { likes } = await Articles.findOne({ articlesId });

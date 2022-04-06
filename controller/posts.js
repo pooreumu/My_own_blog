@@ -1,6 +1,9 @@
 const Posts = require("../schemas/post");
 
 async function showPost(req, res) {
+  // #swagger.description = "여기는 겟을 보여주는 곳 입니다."
+  // #swagger.tags = ["GET"]
+  // #swagger.summary = "겟 조회"
   const { articlesId } = req.params;
   const posts = await Posts.find({ articlesId: articlesId }).sort("-time");
 
@@ -8,6 +11,10 @@ async function showPost(req, res) {
 }
 
 async function writePost(req, res) {
+  // #swagger.description = "여기는 포스트를 보여주는 곳 입니다."
+  // #swagger.tags = ["POST"]
+  // #swagger.summary = "포스트 조회"
+
   const { articlesId } = req.params;
 
   const Contents = req.body.Contents.replace(/\&/g, "&#38;")
@@ -52,6 +59,9 @@ async function writePost(req, res) {
 }
 
 async function revisePost(req, res) {
+  // #swagger.description = "여기는 패치를 보여주는 곳 입니다."
+  // #swagger.tags = ["PATCH"]
+  // #swagger.summary = "패치 조회"
   const { postsId } = req.params;
   const { nickname } = res.locals.user;
   const { Writer } = await Posts.findOne({ postsId });
@@ -72,6 +82,9 @@ async function revisePost(req, res) {
 }
 
 async function deletePost(req, res) {
+  // #swagger.description = "여기는 딜리트를 보여주는 곳 입니다."
+  // #swagger.tags = ["DELETE"]
+  // #swagger.summary = "딜리트 조회"
   const { postsId } = req.params;
   const { nickname } = res.locals.user;
   const { Writer } = await Posts.findOne({ postsId });

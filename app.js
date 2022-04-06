@@ -1,6 +1,8 @@
 const express = require("express");
-const ejs = require("ejs");
 const connect = require("./schemas");
+const ejs = require("ejs");
+const swaggerUi = require("swagger-ui-express");
+const swaggerFile = require("./swagger-output");
 require("dotenv").config();
 
 connect();
@@ -11,47 +13,31 @@ const articleRouter = require("./routes/articles");
 const authRouter = require("./routes/auth");
 const postRouter = require("./routes/posts");
 
+const renderCtl = require("./controller/render");
+
 const request_middleware = (req, res, next) => {
   console.log("Request URL:", req.originalUrl, " - ", new Date());
   next();
 };
 
-function removeHeader() {
-  return function (req, res, next) {
-    res.removeHeader("X-Powered-By");
-    next();
-  };
-}
-
-app.use(removeHeader()); //x-Powerd-By 제거
+app.disable("x-powered-by");
 app.use(request_middleware);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.engine("ejs", ejs.renderFile);
 app.use("/api", [articleRouter, authRouter, postRouter]);
+app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
-app.get("/", (req, res) => {
-  res.render("list.ejs");
-});
+app.get("/", renderCtl.renderList());
 
-app.get("/detail/:articlesId", (req, res) => {
-  res.render("detail.ejs");
-});
+app.get("/detail/:articlesId", renderCtl.renderDetail());
 
-app.get("/write", (req, res) => {
-  res.render("write.ejs");
-});
+app.get("/write", renderCtl.renderWrite());
 
-app.get("/revise/:articlesId", (req, res) => {
-  res.render("revise.ejs");
-});
+app.get("/revise/:articlesId", renderCtl.renderRevise());
 
-app.get("/signup", (req, res) => {
-  res.render("signup.ejs");
-});
+app.get("/signup", renderCtl.renderSignup());
 
-app.get("/signin", (req, res) => {
-  res.render("signin.ejs");
-});
+app.get("/signin", renderCtl.renderSignin());
 
 module.exports = app;
