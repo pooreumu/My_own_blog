@@ -7,6 +7,7 @@ async function showArticles(req, res) {
   // #swagger.tags = ["GET"]
   // #swagger.summary = "겟 조회"
   const articles = await Articles.find().sort("-time");
+  console.log(articles);
 
   res.json({ articles });
 }
