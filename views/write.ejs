@@ -1,101 +1,107 @@
 <!DOCTYPE html>
 
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <!-- jquery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <!-- jquery -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-    <!-- bulma -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css" />
+        <!-- bulma -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css" />
 
-    <title>푸름이의 블로그</title>
+        <title>푸름이의 블로그</title>
 
-    <style>
-      .title {
-        width: fit-content;
-      }
+        <style>
+            .title {
+                width: fit-content;
+            }
 
-      .contentss {
-        margin: 20px auto 0px auto;
+            .contentss {
+                margin: 20px auto 0px auto;
 
-        width: 95%;
-        max-width: 500px;
-      }
-      .btnss {
-        margin: 20px auto 0px auto;
+                width: 95%;
+                max-width: 500px;
+            }
+            .btnss {
+                margin: 20px auto 0px auto;
 
-        width: 95%;
-        max-width: 500px;
-      }
-    </style>
-    <script>
-      $(document).ready(function () {
-        $.ajax({
-          type: "get",
-          url: "/api/users/me",
-          headers: {
-            authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-          success: function (response) {},
-          error: function (error) {
-            alert(error.responseJSON.errorMessage);
-            window.location.href = "/signin";
-          },
-        });
-      });
-      function save_order() {
-        let Title = $("#title").val();
-        if (Title === "") {
-          return alert("제목을 입력해주세요");
-        }
-        let Contents = $("#contents").val();
-        if (Contents === "") {
-          return alert("내용을 입력해주세요");
-        }
-        let date1 = new Date();
-        let date = date1.toDateString();
-        let time = date1.getTime();
+                width: 95%;
+                max-width: 500px;
+            }
+        </style>
+        <script>
+            $(document).ready(function () {
+                $.ajax({
+                    type: "get",
+                    url: "/api/users/me",
+                    headers: {
+                        authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                    success: function (response) {
+                        if (response.message === "new token") {
+                            localStorage.clear();
+                            localStorage.setItem("token", response.myNewToken);
+                        }
+                    },
+                    error: function (error) {
+                        localStorage.clear();
+                        alert(error.responseJSON.errorMessage);
+                        window.location.href = "/signin";
+                    },
+                });
+            });
+            function save_order() {
+                let Title = $("#title").val();
+                if (Title === "") {
+                    return alert("제목을 입력해주세요");
+                }
+                let Contents = $("#contents").val();
+                if (Contents === "") {
+                    return alert("내용을 입력해주세요");
+                }
+                let date1 = new Date();
+                let date = date1.toDateString();
+                let time = date1.getTime();
 
-        let data = { Title, Contents, date, time };
+                let data = { Title, Contents, date, time };
 
-        $.ajax({
-          type: "post",
-          url: "/api/articles",
-          data: data,
-          dataType: "json",
-          headers: {
-            authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-          success: function (response) {
-            alert(response["result"]);
-            window.location.href = "/";
-          },
-        });
-      }
-      function sign_out() {
-        localStorage.clear();
-        window.location.href = "/";
-      }
-    </script>
-  </head>
+                $.ajax({
+                    type: "post",
+                    url: "/api/articles",
+                    data: data,
+                    dataType: "json",
+                    headers: {
+                        authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                    success: function (response) {
+                        alert(response["result"]);
+                        window.location.href = "/";
+                    },
+                });
+            }
+            function sign_out() {
+                localStorage.clear();
+                window.location.href = "/";
+            }
+        </script>
+    </head>
 
-  <body>
-    <section class="hero is-medium is-warning">
-      <div class="hero-body">
-        <p class="title" style="cursor: pointer" onclick="location.replace('/')">푸름이의 블로그</p>
-        <button id="btn_logout" class="button is-warning" style="cursor: pointer" onclick="sign_out()">로그아웃</button>
-      </div>
-    </section>
-    <div class="contentss">
-      <input id="title" class="input is-warning" type="text" placeholder="제목" />
-      <textarea id="contents" class="textarea is-warning" placeholder="내용"></textarea>
-    </div>
-    <div class="btnss">
-      <button class="button is-warning" style="cursor: pointer" onclick="save_order()">글쓰기</button>
-      <button class="button is-warning" style="cursor: pointer" onclick="location.replace('/')">닫기</button>
-    </div>
-  </body>
+    <body>
+        <section class="hero is-medium is-warning">
+            <div class="hero-body">
+                <p class="title" style="cursor: pointer" onclick="location.replace('/')">푸름이의 블로그</p>
+                <button id="btn_logout" class="button is-warning" style="cursor: pointer" onclick="sign_out()">로그아웃</button>
+            </div>
+        </section>
+        <div class="contentss">
+            <input id="title" class="input is-warning" type="text" placeholder="제목" />
+            <textarea id="contents" class="textarea is-warning" placeholder="내용"></textarea>
+        </div>
+        <div class="btnss">
+            <button class="button is-warning" style="cursor: pointer" onclick="save_order()">글쓰기</button>
+            <button class="button is-warning" style="cursor: pointer" onclick="location.replace('/')">닫기</button>
+        </div>
+    </body>
 </html>

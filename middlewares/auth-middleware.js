@@ -15,7 +15,7 @@ module.exports = (req, res, next) => {
     try {
         const myToken = verifyToken(tokenValue);
         if (myToken === "jwt expired") {
-            const userInfo = jwt.decode(tokenValue, "secret");
+            const userInfo = jwt.decode(tokenValue, token_key);
             const userId = userInfo.userId;
             User.findByPk(userId).then((user) => {
                 const refreshToken = user.refreshToken;
@@ -26,7 +26,7 @@ module.exports = (req, res, next) => {
                         errorMessage: "로그인 후 사용하세요",
                     });
                 } else {
-                    const myNewToken = jwt.sign({ userId: user.userId }, "secret", {
+                    const myNewToken = jwt.sign({ userId: user.userId }, token_key, {
                         expiresIn: "10s",
                     });
                     res.send({ message: "new token", myNewToken });
