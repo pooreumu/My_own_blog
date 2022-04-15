@@ -19,7 +19,6 @@ module.exports = (req, res, next) => {
             const userId = userInfo.userId;
             User.findByPk(userId).then((user) => {
                 const refreshToken = user.refreshToken;
-                console.log(refreshToken);
                 const myRefreshToken = verifyToken(refreshToken);
                 if (myRefreshToken === "jwt expired") {
                     res.status(401).json({
