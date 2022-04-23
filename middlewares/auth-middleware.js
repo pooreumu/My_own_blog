@@ -32,6 +32,7 @@ module.exports = (req, res, next) => {
                 }
             });
         } else {
+            const { userId } = jwt.verify(tokenValue, token_key);
             User.findByPk(userId).then((user) => {
                 res.locals.user = user;
                 next();
